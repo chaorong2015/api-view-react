@@ -4,7 +4,7 @@ import fs from 'fs';
 import Index from './renderer/Index';
 
 function layout(data) {
-  let style = fs.readFileSync(process.cwd() + '/css/style.min.css');
+  let style = fs.readFileSync(__dirname + '/css/style.min.css');
   // let content = renderToString(<Index value={data} />);
   let content = renderToStaticMarkup(<Index value={data} />);
   return `

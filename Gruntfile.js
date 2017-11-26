@@ -6,7 +6,6 @@
  */
 
 let alertCommand = 'ls';
-let path = 'api-view-react/';
 
 module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
@@ -23,7 +22,7 @@ module.exports = function (grunt) {
           banner: ''
         },
         files: {
-          'api-view-react/css/style.css': path + 'less/index.less',
+          'css/style.css': 'less/index.less',
         }
       }
     },
@@ -35,7 +34,7 @@ module.exports = function (grunt) {
       },
       live: {
         files: {
-          'api-view-react/css/style.min.css': ['api-view-react/css/style.css']
+          'dist/css/style.min.css': ['css/style.css']
         }
       }
     },
