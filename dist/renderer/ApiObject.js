@@ -34,8 +34,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 class ApiObject extends _react2.default.Component {
 
-  getScopes() {
-    let { value, relation } = this.props;
+  getScopes(props) {
+    let { value, relation } = props;
     return _lodash2.default.filter(relation.scopes, s => s.object === value.id);
   }
 
@@ -46,7 +46,7 @@ class ApiObject extends _react2.default.Component {
       className = className + ' ' + this.props.className;
     }
     let fields = (0, _fieldManage.getFieldsOfModel)(value, relation);
-    let scopes = this.getScopes();
+    let scopes = this.getScopes(this.props);
     return _react2.default.createElement(
       'div',
       { className: className, id: 'object-' + value.id },

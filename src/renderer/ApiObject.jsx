@@ -29,8 +29,8 @@ export default class ApiObject extends React.Component {
     }
   };
 
-  getScopes() {
-    let { value, relation } = this.props;
+  getScopes(props) {
+    let { value, relation } = props;
     return _.filter(relation.scopes, (s) => s.object === value.id);
   }
 
@@ -41,7 +41,7 @@ export default class ApiObject extends React.Component {
       className = className + ' ' + this.props.className;
     }
     let fields = getFieldsOfModel(value, relation);
-    let scopes = this.getScopes();
+    let scopes = this.getScopes(this.props);
     return (
       <div className={className} id={'object-' + value.id}>
         <div className="panel-left">
