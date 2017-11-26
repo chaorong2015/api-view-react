@@ -14,7 +14,7 @@ module.exports = {
   },
   output: {
     filename: 'index.js',
-    path: path.join(__dirname, '/lib')
+    path: path.join(__dirname, '/dist')
   },
   module: {
     loaders: [
