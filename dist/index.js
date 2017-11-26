@@ -25,7 +25,7 @@ var _Index2 = _interopRequireDefault(_Index);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function layout(data) {
-  let style = _fs2.default.readFileSync(process.cwd() + '/css/style.min.css');
+  let style = _fs2.default.readFileSync(__dirname + '/css/style.min.css');
   // let content = renderToString(<Index value={data} />);
   let content = (0, _server.renderToStaticMarkup)(_react2.default.createElement(_Index2.default, { value: data }));
   return `
