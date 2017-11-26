@@ -31,7 +31,7 @@ export default class ApiObject extends React.Component {
 
   getScopes(props) {
     let { value, relation } = props;
-    return _.filter(relation.scopes, (s) => s.object === value.id);
+    return _.filter(relation.scopes, (s) => s.object.toString() === value.id.toString());
   }
 
   render() {
