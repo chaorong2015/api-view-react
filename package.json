@@ -21,7 +21,8 @@
   "dependencies": {
     "react": "^15.6.2",
     "react-bootstrap": "^0.31.5",
-    "react-dom": "^15.6.2"
+    "react-dom": "^15.6.2",
+    "react-router": "^4.2.0"
   },
   "devDependencies": {
     "eslint": "^4.10.0",
