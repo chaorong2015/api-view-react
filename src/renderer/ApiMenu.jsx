@@ -159,7 +159,7 @@ export default class ApiMenu extends React.Component {
               </div>
               {
                 _.map(group.routes, (route) => {
-                  console.log('======route', route);
+                  //console.log('======route', route);
                   if (mode !== 'view') {
                     return (
                       <Link

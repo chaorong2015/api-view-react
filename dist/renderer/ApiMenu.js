@@ -150,7 +150,7 @@ class ApiMenu extends _react2.default.Component {
           ) : null
         ),
         _lodash2.default.map(group.routes, route => {
-          console.log('======route', route);
+          //console.log('======route', route);
           if (mode !== 'view') {
             return _react2.default.createElement(
               _reactRouter.Link,
