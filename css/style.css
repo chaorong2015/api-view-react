@@ -1,3 +1,55 @@
+.checkbox {
+  display: inline-block;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.checkbox .fa {
+  display: inline-block;
+  width: 18px;
+  text-align: center;
+  font-size: 18px;
+  vertical-align: middle;
+  color: #777;
+  margin-right: 4px;
+}
+.checkbox.checked .fa {
+  color: #11b410;
+}
+.checkbox.disabled .fa {
+  color: #aaa;
+  cursor: not-allowed;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 5px;
+}
+::-webkit-scrollbar-corner,
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.06);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+*:hover::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.22);
+}
+.scrollbar-h::-webkit-scrollbar {
+  height: 12px;
+}
+.scrollbar-h::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+}
+.scrollbar-v-xs::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-v-xs::-webkit-scrollbar-corner,
+.scrollbar-v-xs::-webkit-scrollbar-track {
+  background: #fff;
+}
+.scrollbar-v-xs::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+}
 .api-view {
   display: flex;
   flex-direction: row;
@@ -316,27 +368,6 @@
 }
 .case-data-display .field-children .case-data-display .field .value {
   white-space: nowrap;
-}
-.checkbox {
-  display: inline-block;
-  cursor: pointer;
-  vertical-align: middle;
-}
-.checkbox .fa {
-  display: inline-block;
-  width: 18px;
-  text-align: center;
-  font-size: 18px;
-  vertical-align: middle;
-  color: #777;
-  margin-right: 4px;
-}
-.checkbox.checked .fa {
-  color: #11b410;
-}
-.checkbox.disabled .fa {
-  color: #aaa;
-  cursor: not-allowed;
 }
 .object-scope-display .title {
   font-size: 16px;
