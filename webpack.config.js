@@ -14,12 +14,12 @@ module.exports = {
   },
   output: {
     filename: 'index.js',
-    path: path.join(__dirname, '/dist')
+    path: path.join(__dirname, '/lib')
   },
   module: {
     loaders: [
       {
-        test: /\.jsx$/,
+        test: /\.jsx?$/,
         loader: 'babel-loader',
         loaders: ['babel?presets[]=react,presets[]=es2015'],
         query: {

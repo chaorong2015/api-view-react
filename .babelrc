@@ -1,0 +1,10 @@
+{
+  "presets": ['react', 'stage-0'],
+  "plugins": [
+    "syntax-flow",
+    "transform-flow-strip-types",
+    "transform-es2015-modules-commonjs",
+    "transform-object-rest-spread",
+    "transform-class-properties"
+  ]
+}

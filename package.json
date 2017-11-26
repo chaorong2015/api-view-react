@@ -6,7 +6,7 @@
   "scripts": {
     "build:grunt": "grunt",
     "build:webpack": "webpack --config webpack.config.js",
-    "build:lib": "babel src --out-dir lib"
+    "build:lib": "babel src --out-dir dist"
   },
   "repository": {
     "type": "git",
