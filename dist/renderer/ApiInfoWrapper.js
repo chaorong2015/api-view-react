@@ -57,19 +57,24 @@ class ApiInfoWrapper extends _react2.default.Component {
   //初始化分组
   getMapGroup(props) {
     let { value } = props;
+    let mapGroup = {};
     if (value.groups) {
-      let mapGroup = {};
       _lodash2.default.map(value.groups, group => {
-        mapGroup[group.id] = Object.assign({}, group, { routes: [] });
+        mapGroup[group.id] = {
+          id: group.id,
+          title: group.title,
+          routes: []
+        };
       });
       _lodash2.default.map(value.routes, route => {
         if (route.group && mapGroup[route.group]) {
-          mapGroup[route.group].routes.push(route);
+          mapGroup[route.group].routes.push(Object.assign(route));
         }
       });
-      this.setState({ mapGroup });
     }
+    return mapGroup;
   }
+
   render() {
     let { value, className } = this.props;
     let mapGroup = this.getMapGroup(this.props);

@@ -40,21 +40,28 @@ export default class ApiInfoWrapper extends React.Component {
   };
 
   //初始化分组
-  getMapGroup(props: Object) {
+  getMapGroup(props:Object) {
     let { value } = props;
+    let mapGroup = {};
     if (value.groups) {
-      let mapGroup = {};
       _.map(value.groups, (group) => {
-        mapGroup[group.id] = Object.assign({}, group, { routes: [] });
+        mapGroup[group.id] = {
+          id: group.id,
+          title: group.title,
+          routes: []
+        };
       });
       _.map(value.routes, (route) => {
         if (route.group && mapGroup[route.group]) {
-          mapGroup[route.group].routes.push(route);
+          mapGroup[route.group].routes.push(
+            Object.assign(route)
+          );
         }
       });
-      this.setState({ mapGroup });
     }
+    return mapGroup;
   }
+
   render() {
     let { value, className } = this.props;
     let mapGroup = this.getMapGroup(this.props);
