@@ -77,7 +77,7 @@ export default class CaseDataDisplay extends React.Component {
                       return (
                         <div key={f.id} className="field-children">
                           <div
-                            className={this.state[f.id] ? 'toggle-show' : 'toggle-hide'}
+                            className={!this.state[f.id] ? 'toggle-show' : 'toggle-hide'}
                             onClick={() => this.toggleField(f)}
                           />
                           { type === 'object' || f.title ?
@@ -88,7 +88,7 @@ export default class CaseDataDisplay extends React.Component {
                           }
                           <div className="field-children-value">
                             {
-                              this.state[f.id] ?
+                              !this.state[f.id] ?
                                 <div>
                                   {
                                     this.props.index <= 2 ?

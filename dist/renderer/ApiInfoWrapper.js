@@ -54,15 +54,8 @@ class ApiInfoWrapper extends _react2.default.Component {
     }, _temp;
   }
 
-  componentDidMount() {
-    this.init(this.props);
-  }
-
-  componentWillReceiveProps(props) {
-    this.init(props);
-  }
   //初始化分组
-  init(props) {
+  getMapGroup(props) {
     let { value } = props;
     if (value.groups) {
       let mapGroup = {};
@@ -79,7 +72,7 @@ class ApiInfoWrapper extends _react2.default.Component {
   }
   render() {
     let { value, className } = this.props;
-    let { mapGroup } = this.state;
+    let mapGroup = this.getMapGroup(this.props);
     let relationData = {
       objects: value.objects,
       tuples: value.tuples,

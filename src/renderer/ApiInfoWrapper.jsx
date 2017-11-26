@@ -38,15 +38,9 @@ export default class ApiInfoWrapper extends React.Component {
   state = {
     mapGroup: Object
   };
-  componentDidMount() {
-    this.init(this.props);
-  }
 
-  componentWillReceiveProps(props:Object) {
-    this.init(props);
-  }
   //初始化分组
-  init(props: Object) {
+  getMapGroup(props: Object) {
     let { value } = props;
     if (value.groups) {
       let mapGroup = {};
@@ -63,7 +57,7 @@ export default class ApiInfoWrapper extends React.Component {
   }
   render() {
     let { value, className } = this.props;
-    let { mapGroup } = this.state;
+    let mapGroup = this.getMapGroup(this.props);
     let relationData = {
       objects: value.objects,
       tuples: value.tuples,

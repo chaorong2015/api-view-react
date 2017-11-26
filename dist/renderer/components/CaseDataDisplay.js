@@ -82,7 +82,7 @@ class CaseDataDisplay extends _react2.default.Component {
                 'div',
                 { key: f.id, className: 'field-children' },
                 _react2.default.createElement('div', {
-                  className: this.state[f.id] ? 'toggle-show' : 'toggle-hide',
+                  className: !this.state[f.id] ? 'toggle-show' : 'toggle-hide',
                   onClick: () => this.toggleField(f)
                 }),
                 type === 'object' || f.title ? _react2.default.createElement(
@@ -98,7 +98,7 @@ class CaseDataDisplay extends _react2.default.Component {
                 _react2.default.createElement(
                   'div',
                   { className: 'field-children-value' },
-                  this.state[f.id] ? _react2.default.createElement(
+                  !this.state[f.id] ? _react2.default.createElement(
                     'div',
                     null,
                     this.props.index <= 2 ? _react2.default.createElement(CaseDataDisplay, {
