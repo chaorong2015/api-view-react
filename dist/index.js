@@ -33,6 +33,7 @@ function layout(data) {
     <html lang="en">
     <head>
       <meta charset="UTF-8">
+      <link href="http://cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.min.css">
       <style type="text/css">${style}</style>
     </head>
     <body>
