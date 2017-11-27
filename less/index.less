@@ -1,23 +1,61 @@
+body{
+	margin: 0;
+}
 
+@brand-primary: #049cdb;
+@brand-info: #1dbfd7;
+@brand-success: #11b410;
+@brand-danger: #d83451;
+@brand-warning: #f89a08;
 
+@text-dark: #444;
+@text-gray: #777;
+@text-light: #aaa;
+
+// base
+@space-large: 24px;
+@space-medium: 16px;
+@space-small: 10px;
+@space-xsmall: 5px;
+@space-0: 0;
+
+.text-success {
+	color: @brand-success;
+}
+.text-danger {
+	color: @brand-danger;
+}
+.text-center{
+	text-align: center;
+}
+.help-block {
+	font-size: 12px;
+	color: #999;
+	word-break: break-all;
+}
+
+a {
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+.pointer {
+	cursor: pointer;
+}
+.api-view{
+	.api-menu {
+		height: auto;
+		max-height: 100%;
+	}
+	table {
+		background-color: transparent;
+		border-collapse: collapse;
+		border-spacing: 0;
+	}
+}
 
 @import "checkbox";
 @import "scrollbar";
+@import "padding";
 @import "./api/index";
-
-/* Font Awesome
-*/
-@import "../node_modules/font-awesome/less/variables.less";
-@fa-font-path: "//c.m6g.me/libs/font-awesome/4.7.0/fonts";
-@import "../node_modules/font-awesome/less/mixins.less";
-@import "../node_modules/font-awesome/less/path.less";
-@import "../node_modules/font-awesome/less/core.less";
-@import "../node_modules/font-awesome/less/larger.less";
-@import "../node_modules/font-awesome/less/fixed-width.less";
-@import "../node_modules/font-awesome/less/list.less";
-@import "../node_modules/font-awesome/less/bordered-pulled.less";
-@import "../node_modules/font-awesome/less/animated.less";
-@import "../node_modules/font-awesome/less/rotated-flipped.less";
-@import "../node_modules/font-awesome/less/stacked.less";
-@import "../node_modules/font-awesome/less/icons.less";
-@import "../node_modules/font-awesome/less/screen-reader.less";
