@@ -120,7 +120,7 @@ class ApiMenu extends _react2.default.Component {
       )),
       _lodash2.default.map(mapGroup, group => _react2.default.createElement(
         'div',
-        { key: group.id, className: activeGroup.indexOf(group.id) >= 0 ? 'menu' : 'menu active' },
+        { key: group.id, className: activeGroup.indexOf(group.id) < 0 ? 'menu' : 'menu active' },
         _react2.default.createElement(
           'div',
           { className: 'display-flex' },
@@ -142,7 +142,7 @@ class ApiMenu extends _react2.default.Component {
           group.routes && group.routes.length ? _react2.default.createElement(
             'span',
             {
-              className: 'icon pull-right padding-h-sm',
+              className: 'icon icon-link pull-right padding-h-sm',
               onClick: () => this.openSub(group.id)
             },
             _react2.default.createElement('i', { className: 'fa fa-angle-right' }),
@@ -175,7 +175,7 @@ class ApiMenu extends _react2.default.Component {
       )),
       _react2.default.createElement(
         'div',
-        { className: activeGroup.indexOf('object') >= 0 ? 'menu' : 'menu active' },
+        { className: activeGroup.indexOf('object') < 0 ? 'menu' : 'menu active' },
         _react2.default.createElement(
           'div',
           { className: 'display-flex' },
@@ -185,9 +185,9 @@ class ApiMenu extends _react2.default.Component {
             '\u5BF9\u8C61'
           ),
           value.objects && value.objects.length ? _react2.default.createElement(
-            'span',
+            'div',
             {
-              className: 'icon pull-right padding-h-sm',
+              className: 'icon icon-link pull-right padding-h-sm',
               onClick: () => this.openSub('object')
             },
             _react2.default.createElement('i', { className: 'fa fa-angle-right' }),
@@ -216,7 +216,7 @@ class ApiMenu extends _react2.default.Component {
       ),
       _react2.default.createElement(
         'div',
-        { className: activeGroup.indexOf('tuple') >= 0 ? 'menu' : 'menu active' },
+        { className: activeGroup.indexOf('tuple') < 0 ? 'menu' : 'menu active' },
         _react2.default.createElement(
           'div',
           { className: 'display-flex' },
@@ -228,7 +228,7 @@ class ApiMenu extends _react2.default.Component {
           value.tuples && value.tuples.length ? _react2.default.createElement(
             'span',
             {
-              className: 'icon pull-right padding-h-sm',
+              className: 'icon icon-link pull-right padding-h-sm',
               onClick: () => this.openSub('tuple')
             },
             _react2.default.createElement('i', { className: 'fa fa-angle-right' }),
@@ -261,7 +261,7 @@ class ApiMenu extends _react2.default.Component {
       ),
       _react2.default.createElement(
         'div',
-        { className: activeGroup.indexOf('code') >= 0 ? 'menu' : 'menu active' },
+        { className: activeGroup.indexOf('code') < 0 ? 'menu' : 'menu active' },
         mode !== 'view' ? _react2.default.createElement(
           _reactRouter.Link,
           { to: this.getUrl('code'), className: 'group group-code' },
