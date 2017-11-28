@@ -77,41 +77,40 @@ export default class CaseDataDisplay extends React.Component {
                       return (
                         <div key={f.id} className="field-children">
                           <div
-                            className={!this.state[f.id] ? 'toggle-show' : 'toggle-hide'}
+                            className={
+                              this.state[f.id] ? 'icon icon-toggle-field toggle-show'
+                                : 'icon icon-toggle-field toggle-hide'}
                             onClick={() => this.toggleField(f)}
                           />
                           { type === 'object' || f.title ?
-                            <span className="property">
+                            <div className="property">
                               {f.title}
                               <span className="colon">:</span>
-                            </span> : null
+                            </div> : null
                           }
                           <div className="field-children-value">
-                            {
-                              !this.state[f.id] ?
-                                <div>
-                                  {
-                                    this.props.index <= 2 ?
-                                      <CaseDataDisplay
-                                        index={this.props.index + 1}
-                                        value={f.children.fields}
-                                        wrapType={f.fieldType}
-                                        type={f.modelType}
-                                        next={index < value.length - 1}
-                                      /> : <span>{'<' + f.type + '>'}</span>
-                                  }
-                                </div> :
-                                <div>
-                                  {this.getLeftMark(f.fieldType)}
-                                  {this.getLeftMark(f.modelType)}
-                                  ...
-                                  {this.getRightMark(f.modelType)}
-                                  {this.getRightMark(f.fieldType)}
-                                  {
-                                    index < value.length - 1 ? <span className="split">,</span> : null
-                                  }
-                                </div>
-                            }
+                            <div className="property-show">
+                              {
+                                this.props.index <= 2 ?
+                                  <CaseDataDisplay
+                                    index={this.props.index + 1}
+                                    value={f.children.fields}
+                                    wrapType={f.fieldType}
+                                    type={f.modelType}
+                                    next={index < value.length - 1}
+                                  /> : <span>{'<' + f.type + '>'}</span>
+                              }
+                            </div>
+                            <div className="property-hide">
+                              {this.getLeftMark(f.fieldType)}
+                              {this.getLeftMark(f.modelType)}
+                              ...
+                              {this.getRightMark(f.modelType)}
+                              {this.getRightMark(f.fieldType)}
+                              {
+                                index < value.length - 1 ? <span className="split">,</span> : null
+                              }
+                            </div>
                           </div>
                         </div>
                       );

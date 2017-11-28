@@ -71,11 +71,11 @@ export default class ApiMenu extends React.Component {
   };
   //获取路由
   getUrl = (type: string, id?: string) => {
-    let { baseUrl, mode } = this.props;
-    if (!id) {
-      return mode === 'view' ? baseUrl + '#' + type : baseUrl + '/' + type;
-    }
-    return mode === 'view' ? baseUrl + '#' + type + '-' + id : baseUrl + '/' + type + '/' + id;
+  let { baseUrl, mode } = this.props;
+  if (!id) {
+    return mode === 'view' ? baseUrl + '#' + type : baseUrl + '/' + type;
+  }
+  return mode === 'view' ? baseUrl + '#' + type + '-' + id : baseUrl + '/' + type + '/' + id;
   };
   //初始化分组
   getMapGroup(props:Object) {
@@ -129,7 +129,7 @@ export default class ApiMenu extends React.Component {
         }
         {
           _.map(mapGroup, (group) => (
-            <div key={group.id} className={activeGroup.indexOf(group.id) >= 0 ? 'menu' : 'menu active'}>
+            <div key={group.id} className={activeGroup.indexOf(group.id) < 0 ? 'menu' : 'menu active'}>
               <div className="display-flex">
                 {
                   mode !== 'view' ?
@@ -149,12 +149,12 @@ export default class ApiMenu extends React.Component {
                 {
                   group.routes && group.routes.length ?
                     <span
-                      className="icon pull-right padding-h-sm"
+                      className="icon icon-link pull-right padding-h-sm"
                       onClick={() => this.openSub(group.id)}
                     >
-                      <i className="fa fa-angle-right" />
-                      <i className="fa fa-angle-down" />
-                    </span> : null
+                        <i className="fa fa-angle-right" />
+                        <i className="fa fa-angle-down" />
+                      </span> : null
                 }
               </div>
               {
@@ -181,18 +181,18 @@ export default class ApiMenu extends React.Component {
             </div>
           ))
         }
-        <div className={activeGroup.indexOf('object') >= 0 ? 'menu' : 'menu active'}>
+        <div className={activeGroup.indexOf('object') < 0 ? 'menu' : 'menu active'}>
           <div className="display-flex">
             <div className="group group-object flex">对象</div>
             {
               value.objects && value.objects.length ?
-                <span
-                  className="icon pull-right padding-h-sm"
+                <div
+                  className="icon icon-link pull-right padding-h-sm"
                   onClick={() => this.openSub('object')}
                 >
                   <i className="fa fa-angle-right" />
                   <i className="fa fa-angle-down" />
-                </span> : null
+                </div> : null
             }
           </div>
           {
@@ -213,18 +213,18 @@ export default class ApiMenu extends React.Component {
             ))
           }
         </div>
-        <div className={activeGroup.indexOf('tuple') >= 0 ? 'menu' : 'menu active'}>
+        <div className={activeGroup.indexOf('tuple') < 0 ? 'menu' : 'menu active'}>
           <div className="display-flex">
             <div className="group group-object flex">元组</div>
             {
               value.tuples && value.tuples.length ?
                 <span
-                  className="icon pull-right padding-h-sm"
+                  className="icon icon-link pull-right padding-h-sm"
                   onClick={() => this.openSub('tuple')}
                 >
-                  <i className="fa fa-angle-right" />
-                  <i className="fa fa-angle-down" />
-                </span> : null
+                    <i className="fa fa-angle-right" />
+                    <i className="fa fa-angle-down" />
+                  </span> : null
             }
           </div>
           {
@@ -245,7 +245,7 @@ export default class ApiMenu extends React.Component {
             ))
           }
         </div>
-        <div className={activeGroup.indexOf('code') >= 0 ? 'menu' : 'menu active'}>
+        <div className={activeGroup.indexOf('code') < 0 ? 'menu' : 'menu active'}>
           {
             mode !== 'view' ?
               <Link to={this.getUrl('code')} className="group group-code" >状态码</Link> :
