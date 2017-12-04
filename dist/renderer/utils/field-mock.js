@@ -33,7 +33,7 @@ function getMockData(field, index) {
     obj.value = defaultValue || '';
     //判断是否有示例值
     if (!obj.value) {
-      if (/^Mock.+\([^;]+\);?$/.test(value)) {
+      if (/^Mock.+\([^;]*\);?$/.test(value)) {
         try {
           //todo 替换eval方法
           obj.value = eval(value);
@@ -86,7 +86,7 @@ function getMockData(field, index) {
   } else if (field.type === 'string[]') {
     obj.value = defaultValue || '';
     if (!obj.value) {
-      if (/^\[?Mock.+\([^;]+\)\]?;?$/.test(value)) {
+      if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
           //todo 替换eval方法
           let v = eval(value);
@@ -192,7 +192,7 @@ function getMockData(field, index) {
         obj.value = [];
       }
     } else if (value) {
-      if (/^\[?Mock.+\([^;]+\)\]?;?$/.test(value)) {
+      if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
           //todo 替换eval方法
           let v = eval(value);
@@ -257,7 +257,7 @@ function getMockData(field, index) {
         obj.value = [false];
       }
     } else if (value) {
-      if (/^\[?Mock.+\([^;]+\)\]?;?$/.test(value)) {
+      if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
           //todo 替换eval方法
           let v = eval(value);
@@ -325,7 +325,7 @@ function getMockData(field, index) {
         obj.value = {};
       }
     } else if (value) {
-      if (/^\[?Mock.+\([^;]+\)\]?;?$/.test(value)) {
+      if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
           //todo 替换eval方法
           obj.value = eval(value);
