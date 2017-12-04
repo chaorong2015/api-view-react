@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/chaorong2015/api-view-react#readme",
   "dependencies": {
+    "mockjs": "^1.0.1-beta3",
     "react": "^15.6.2",
     "react-bootstrap": "^0.31.5",
     "react-dom": "^15.6.2",
