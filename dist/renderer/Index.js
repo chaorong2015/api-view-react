@@ -21,6 +21,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 class Index extends _react2.default.Component {
 
   render() {
+    const { value, isDownload } = this.props;
     let className = 'api-view';
     if (this.props.className) {
       className += ' ' + this.props.className;
@@ -31,10 +32,11 @@ class Index extends _react2.default.Component {
       _react2.default.createElement(_ApiMenu2.default, {
         className: 'scrollbar-v-xs',
         mode: 'view',
+        isDownload: isDownload,
         baseUrl: this.props.menuBaseUrl,
         value: this.props.value
       }),
-      _react2.default.createElement(_ApiInfoWrapper2.default, { className: 'scrollbar-v-xs', value: this.props.value })
+      _react2.default.createElement(_ApiInfoWrapper2.default, { baseUrl: this.props.menuBaseUrl, className: 'scrollbar-v-xs', value: value })
     );
   }
 }
@@ -47,5 +49,6 @@ exports.default = Index; /**
 
 Index.defaultProps = {
   className: '',
-  menuBaseUrl: ''
+  menuBaseUrl: '',
+  isDownload: false
 };

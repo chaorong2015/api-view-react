@@ -5,16 +5,19 @@
  * chaorong@maichong.it
  */
 
+// @flow
+
 import React from 'react';
 import BaseInfo from './components/BaseInfo';
 
-export default class ApiGroup extends React.Component {
+type Props = {
+  className?: string,
+  value: Object
+};
+
+export default class ApiGroup extends React.Component<Props> {
   static defaultProps = {
     className: ''
-  };
-  props: {
-    className?: string;
-    value: Object;
   };
 
   render() {

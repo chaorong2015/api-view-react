@@ -34,9 +34,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 class ApiObject extends _react2.default.Component {
 
-  getScopes(props) {
-    let { value, relation } = props;
-    return _lodash2.default.filter(relation.scopes, s => s.object.toString() === value.id.toString());
+  getScopes() {
+    let { value, relation } = this.props;
+    return _lodash2.default.filter(relation.scopes, s => s.object === value.id);
   }
 
   render() {
@@ -46,7 +46,7 @@ class ApiObject extends _react2.default.Component {
       className = className + ' ' + this.props.className;
     }
     let fields = (0, _fieldManage.getFieldsOfModel)(value, relation);
-    let scopes = this.getScopes(this.props);
+    let scopes = this.getScopes();
     return _react2.default.createElement(
       'div',
       { className: className, id: 'object-' + value.id },
@@ -62,7 +62,7 @@ class ApiObject extends _react2.default.Component {
             { className: 'padding-sm-v' },
             '\u5C5E\u6027'
           ),
-          _react2.default.createElement(_FieldDisplay2.default, { value: fields })
+          _react2.default.createElement(_FieldDisplay2.default, { baseUrl: this.props.baseUrl, value: fields })
         ) : null,
         scopes && scopes.length ? _react2.default.createElement(_ScopeDisplay2.default, {
           value: Object.assign({}, value, { scopes, fields })
@@ -84,5 +84,6 @@ exports.default = ApiObject; /**
                               */
 
 ApiObject.defaultProps = {
-  className: ''
+  className: '',
+  baseUrl: ''
 };

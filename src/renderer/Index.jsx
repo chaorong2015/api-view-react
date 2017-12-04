@@ -5,23 +5,49 @@
  * chaorong@maichong.it
  */
 
+// @flow
+
 import React from 'react';
 import ApiMenu from './ApiMenu';
 import ApiInfoWrapper from './ApiInfoWrapper';
+import type {
+  ApiDescription,
+  ApiGroup,
+  ApiRoute,
+  ApiObject,
+  ApiTuple,
+  ApiCode,
+  ApiField,
+  ApiScope,
+  ApiResponse
+} from '../../../types';
 
-export default class Index extends React.Component {
+type Props = {
+  value: {
+    groups: Array<ApiGroup>,
+    routes: Array<ApiRoute>,
+    descriptions: Array<ApiDescription>,
+    objects: Array<ApiObject>,
+    tuples: Array<ApiTuple>,
+    codes: Array<ApiCode>,
+    fields: Array<ApiField>,
+    scopes: Array<ApiScope>,
+    responses: Array<ApiResponse>
+  },
+  menuBaseUrl: string,
+  className?: string,
+  isDownload?: boolean
+};
+
+export default class Index extends React.Component<Props> {
   static defaultProps = {
     className: '',
     menuBaseUrl: '',
-  };
-
-  props: {
-    value: Object;
-    menuBaseUrl?: string;
-    className: string;
+    isDownload: false
   };
 
   render() {
+    const { value, isDownload } = this.props;
     let className = 'api-view';
     if (this.props.className) {
       className += (' ' + this.props.className);
@@ -31,10 +57,11 @@ export default class Index extends React.Component {
         <ApiMenu
           className="scrollbar-v-xs"
           mode="view"
+          isDownload={isDownload}
           baseUrl={this.props.menuBaseUrl}
           value={this.props.value}
         />
-        <ApiInfoWrapper className="scrollbar-v-xs" value={this.props.value} />
+        <ApiInfoWrapper baseUrl={this.props.menuBaseUrl} className="scrollbar-v-xs" value={value} />
       </div>
     );
   }

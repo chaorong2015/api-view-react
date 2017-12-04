@@ -39,6 +39,5 @@ class ApiDesc extends _react2.default.Component {
 }
 exports.default = ApiDesc;
 ApiDesc.defaultProps = {
-  className: '',
-  showRight: false
+  className: ''
 };

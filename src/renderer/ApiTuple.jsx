@@ -5,26 +5,30 @@
  * chaorong@maichong.it
  */
 
+// @flow
+
 import React from 'react';
 import BaseInfo from './components/BaseInfo';
 import FieldDisplay from './components/FieldDisplay';
 import ModelCase from './components/ModelCase';
 import { getFieldsOfModel } from './utils/field-manage';
 
-export default class ApiTuple extends React.Component {
+type Props = {
+  baseUrl?: string,
+  className?: string,
+  value: Object,
+  relation: {
+    objects: Array<Object>,
+    tuples: Array<Object>,
+    fields: Array<Object>,
+    scopes: Array<Object>
+  }
+};
+
+export default class ApiTuple extends React.Component<Props> {
   static defaultProps = {
-    className: ''
-  };
-  props: {
-    className?: string;
-    value: Object;
-    relation: {
-      objects: Array<Object>;
-      tuples: Array<Object>;
-      schemas: Array<Object>;
-      fields: Array<Object>;
-      scopes: Array<Object>
-    }
+    className: '',
+    baseUrl: ''
   };
 
   render() {
@@ -50,7 +54,7 @@ export default class ApiTuple extends React.Component {
             fields && fields.length ?
               <div className="tuple">
                 <div className="padding-sm-v">属性</div>
-                <FieldDisplay value={fields} />
+                <FieldDisplay baseUrl={this.props.baseUrl} value={fields} />
               </div> : null
           }
         </div>

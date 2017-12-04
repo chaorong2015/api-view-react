@@ -56,7 +56,7 @@ class ApiTuple extends _react2.default.Component {
             { className: 'padding-sm-v' },
             '\u5C5E\u6027'
           ),
-          _react2.default.createElement(_FieldDisplay2.default, { value: fields })
+          _react2.default.createElement(_FieldDisplay2.default, { baseUrl: this.props.baseUrl, value: fields })
         ) : null
       ),
       _react2.default.createElement(
@@ -75,5 +75,6 @@ exports.default = ApiTuple; /**
                              */
 
 ApiTuple.defaultProps = {
-  className: ''
+  className: '',
+  baseUrl: ''
 };

@@ -8,20 +8,20 @@
 
 import React from 'react';
 
-export default class CheckBox extends React.Component {
+type Props = {
+  radio: boolean,
+  checked: boolean,
+  label: string,
+  disabled: boolean,
+  onChange: Function
+};
+
+export default class CheckBox extends React.Component<Props> {
   static defaultProps = {
     radio: false,
     checked: false,
     label: '',
     disabled: false
-  };
-
-  props: {
-    radio: boolean;
-    checked: boolean;
-    label: string;
-    disabled: boolean;
-    onChange: Function;
   };
 
   handleCheck = () => {

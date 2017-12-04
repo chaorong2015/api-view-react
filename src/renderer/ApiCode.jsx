@@ -5,17 +5,20 @@
  * chaorong@maichong.it
  */
 
+// @flow
+
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import _ from 'lodash';
 
-export default class ApiCode extends React.Component {
+type Props = {
+  className?: string;
+  value: Array<Object>;
+};
+
+export default class ApiCode extends React.Component<Props> {
   static defaultProps = {
     className: ''
-  };
-  props: {
-    className?: string;
-    value: Object;
   };
   render() {
     let { value } = this.props;
@@ -34,14 +37,15 @@ export default class ApiCode extends React.Component {
                 <td className="text-center" width="200">描述</td>
               </tr>
               {
-                _.map(value, (v) => (<tr key={v.id}>
-                  <td className="text-center">
-                    <span className="code-title">{v.code}</span>
-                  </td>
-                  <td>
-                    {v.desc}
-                  </td>
-                </tr>))
+                _.map(value, (v) => (
+                  <tr key={v.id}>
+                    <td className="text-center">
+                      <span className="code-title">{v.code}</span>
+                    </td>
+                    <td>
+                      {v.desc}
+                    </td>
+                  </tr>))
               }
             </tbody>
           </Table>

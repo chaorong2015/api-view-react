@@ -13,7 +13,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 class BaseInfo extends _react2.default.Component {
 
   render() {
-    let { title, desc } = this.props;
+    let {
+      title, desc, share, markEle
+    } = this.props;
     let className = 'base-info';
     if (this.props.className) {
       className = className + ' ' + this.props.className;
@@ -28,16 +30,16 @@ class BaseInfo extends _react2.default.Component {
         'div',
         { className: 'title' },
         title,
-        this.props.share ? _react2.default.createElement(
+        share ? _react2.default.createElement(
           'span',
           { className: 'text-danger' },
           '*'
         ) : null
       ),
-      this.props.markEle ? _react2.default.createElement(
+      markEle ? _react2.default.createElement(
         'div',
         { className: 'mark' },
-        this.props.markEle
+        markEle
       ) : null,
       _react2.default.createElement(
         'div',

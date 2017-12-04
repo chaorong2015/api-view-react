@@ -24,7 +24,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 class ModelCase extends _react2.default.Component {
 
   render() {
-    let { className, value, title, type } = this.props;
+    let {
+      className, value, title, type
+    } = this.props;
     if (!value || !value.length) return _react2.default.createElement('div', null);
     return _react2.default.createElement(
       'div',
@@ -37,7 +39,7 @@ class ModelCase extends _react2.default.Component {
       _react2.default.createElement(
         'div',
         { className: 'case-data-panel' },
-        _react2.default.createElement(_CaseDataDisplay2.default, { type: type, value: value })
+        _react2.default.createElement(_CaseDataDisplay2.default, { type: type || '', value: value })
       )
     );
   }

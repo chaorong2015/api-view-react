@@ -117,6 +117,7 @@ class ApiRoute extends _react2.default.Component {
     let fieldsRouteQuery = (0, _fieldManage.filterRouteFieldsByType)('route:query', fields);
     let fieldsRouteBody = (0, _fieldManage.getFieldsOfBody)(value, relation);
     let responseArr = (0, _fieldManage.getFieldsOfResponse)(value, relation);
+    responseArr = _lodash2.default.orderBy(responseArr, ['code'], ['asc']);
     return _react2.default.createElement(
       'div',
       { className: className, id: 'route-' + value.id },
@@ -155,7 +156,7 @@ class ApiRoute extends _react2.default.Component {
             { className: 'title-left-border' },
             '\u8DEF\u5F84\u53C2\u6570'
           ),
-          _react2.default.createElement(_FieldDisplay2.default, { value: fieldsRoutePath })
+          _react2.default.createElement(_FieldDisplay2.default, { baseUrl: this.props.baseUrl, value: fieldsRoutePath })
         ) : null,
         fieldsRouteQuery && fieldsRouteQuery.length ? _react2.default.createElement(
           'div',
@@ -165,7 +166,7 @@ class ApiRoute extends _react2.default.Component {
             { className: 'title-left-border' },
             '\u67E5\u8BE2\u53C2\u6570'
           ),
-          _react2.default.createElement(_FieldDisplay2.default, { value: fieldsRouteQuery })
+          _react2.default.createElement(_FieldDisplay2.default, { baseUrl: this.props.baseUrl, value: fieldsRouteQuery })
         ) : null,
         fieldsRouteBody && fieldsRouteBody.fields && fieldsRouteBody.fields.length ? _react2.default.createElement(
           'div',
@@ -184,23 +185,20 @@ class ApiRoute extends _react2.default.Component {
           fieldsRouteBody.modelTitle ? _react2.default.createElement(
             'div',
             { className: 'padding-v-sm' },
-            _react2.default.createElement(
+            fieldsRouteBody.bodyType !== '{}' ? _react2.default.createElement(
               'div',
               { className: 'desc' },
-              '\u8FD4\u56DE\u7ED3\u679C\u4E3A',
-              fieldsRouteBody.fieldType === 'object' || fieldsRouteBody.fieldType === 'scope' ? fieldsRouteBody.modelTitle + ',类型为Object' : null,
-              fieldsRouteBody.fieldType === 'tuple' ? '[ ' + fieldsRouteBody.modelTitle + ' ],类型为Array' : null,
-              fieldsRouteBody.fieldType === 'array' ? fieldsRouteBody.modelTitle + ' [ ],类型为Array' : null,
-              ',',
+              '\u8BF7\u6C42\u6570\u636E\u4E3A',
+              fieldsRouteBody.bodyType,
               fieldsRouteBody.fieldType === 'tuple' ? '[ ' + fieldsRouteBody.modelTitle + ' ]' : fieldsRouteBody.modelTitle,
               '\u5C5E\u6027\u4FE1\u606F\u5982\u4E0B'
-            ),
-            _react2.default.createElement(_FieldDisplay2.default, { className: 'flex', value: fieldsRouteBody.fields })
-          ) : _react2.default.createElement(_FieldDisplay2.default, { className: 'flex', value: fieldsRouteBody.fields })
+            ) : null,
+            _react2.default.createElement(_FieldDisplay2.default, { baseUrl: this.props.baseUrl, className: 'flex', value: fieldsRouteBody.fields })
+          ) : _react2.default.createElement(_FieldDisplay2.default, { baseUrl: this.props.baseUrl, className: 'flex', value: fieldsRouteBody.fields })
         ) : null,
         responseArr && responseArr.length ? _react2.default.createElement(
           'div',
-          null,
+          { className: 'padding-top' },
           _react2.default.createElement(
             'div',
             { className: 'title-left-border' },
@@ -208,10 +206,12 @@ class ApiRoute extends _react2.default.Component {
           ),
           _lodash2.default.map(responseArr, r => _react2.default.createElement(
             'div',
-            { className: 'padding-v', key: r.id },
+            { className: 'padding-top', key: r.id },
             _react2.default.createElement(
               'div',
-              { className: 'code-desc' },
+              {
+                className: _lodash2.default.isNumber(r.code) && r.code <= 400 && r.code >= 200 ? 'code-desc text-success' : 'code-desc text-danger'
+              },
               _react2.default.createElement(
                 'span',
                 { className: 'padding-right-sm' },
@@ -219,26 +219,24 @@ class ApiRoute extends _react2.default.Component {
               ),
               _react2.default.createElement(
                 'span',
-                { className: 'desc' },
+                null,
                 r.desc
               )
             ),
             r.modelTitle ? _react2.default.createElement(
               'div',
               { className: 'padding-v-sm' },
-              _react2.default.createElement(
+              r.type !== '{}' ? _react2.default.createElement(
                 'div',
                 { className: 'desc' },
                 '\u8FD4\u56DE\u7ED3\u679C\u4E3A',
-                r.fieldType === 'object' || r.fieldType === 'scope' ? r.modelTitle + ',类型为Object' : null,
-                r.fieldType === 'tuple' ? '[ ' + r.modelTitle + ' ],类型为Array' : null,
-                r.fieldType === 'array' ? r.modelTitle + ' [ ],类型为Array' : null,
+                r.type,
                 ',',
                 r.fieldType === 'tuple' ? '[ ' + r.modelTitle + ' ]' : r.modelTitle,
                 '\u5C5E\u6027\u4FE1\u606F\u5982\u4E0B'
-              ),
-              _react2.default.createElement(_FieldDisplay2.default, { className: 'flex', value: r.fields })
-            ) : _react2.default.createElement(_FieldDisplay2.default, { className: 'flex', value: r.fields })
+              ) : null,
+              _react2.default.createElement(_FieldDisplay2.default, { baseUrl: this.props.baseUrl, className: 'flex', value: r.fields })
+            ) : _react2.default.createElement(_FieldDisplay2.default, { baseUrl: this.props.baseUrl, className: 'flex', value: r.fields })
           ))
         ) : null
       ),
@@ -246,7 +244,7 @@ class ApiRoute extends _react2.default.Component {
         'div',
         { className: 'panel-right text-center' },
         _react2.default.createElement(_RouteMethodDisplay2.default, { method: value.method, url: value.path }),
-        _react2.default.createElement(_RequestCase2.default, { title: '\u8BF7\u6C42\u793A\u4F8B', value: fieldsRouteBody }),
+        _react2.default.createElement(_RequestCase2.default, { title: '\u8BF7\u6C42\u793A\u4F8B', value: fieldsRouteBody || { fieldType: '', modelType: '', fields: [] } }),
         _react2.default.createElement(_ResponseCase2.default, { title: '\u54CD\u5E94\u793A\u4F8B', value: responseArr })
       )
     );
@@ -254,5 +252,6 @@ class ApiRoute extends _react2.default.Component {
 }
 exports.default = ApiRoute;
 ApiRoute.defaultProps = {
-  className: ''
+  className: '',
+  baseUrl: ''
 };

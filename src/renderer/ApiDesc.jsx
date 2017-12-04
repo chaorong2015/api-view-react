@@ -5,18 +5,19 @@
  * chaorong@maichong.it
  */
 
+// @flow
+
 import React from 'react';
 import BaseInfo from './components/BaseInfo';
 
-export default class ApiDesc extends React.Component {
+type Props = {
+  className?: string,
+  value: Object
+};
+
+export default class ApiDesc extends React.Component<Props> {
   static defaultProps = {
-    className: '',
-    showRight: false
-  };
-  props: {
-    className?: string;
-    value: Object;
-    showRight?: boolean;
+    className: ''
   };
 
   render() {

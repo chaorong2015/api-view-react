@@ -28,7 +28,7 @@ class _class extends _react2.default.Component {
       { className: className },
       _react2.default.createElement(
         'div',
-        { className: 'title' },
+        { className: 'padding-v-sm' },
         'Scopes\u5217\u8868'
       ),
       _react2.default.createElement(
@@ -74,14 +74,15 @@ class _class extends _react2.default.Component {
               _react2.default.createElement(
                 'td',
                 null,
-                _react2.default.createElement(_CheckBox2.default, { checked: true, disabled: true })
+                _react2.default.createElement(_CheckBox2.default, { checked: true, disabled: true, onChange: () => {} })
               ),
               value.scopes && value.scopes.map(scope => _react2.default.createElement(
                 'td',
                 { key: scope.id },
                 _react2.default.createElement(_CheckBox2.default, {
                   checked: _lodash2.default.indexOf(scope.fields, field.title) < 0,
-                  disabled: true
+                  disabled: true,
+                  onChange: () => {}
                 })
               ))
             ))

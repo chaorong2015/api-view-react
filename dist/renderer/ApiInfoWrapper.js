@@ -46,12 +46,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 
 class ApiInfoWrapper extends _react2.default.Component {
-  constructor(...args) {
-    var _temp;
 
-    return _temp = super(...args), this.state = {
-      mapGroup: Object
-    }, _temp;
+  constructor(props) {
+    super(props);
+    this.state = {
+      mapGroup: {}
+    };
   }
 
   //初始化分组
@@ -89,16 +89,22 @@ class ApiInfoWrapper extends _react2.default.Component {
     return _react2.default.createElement(
       'div',
       { className: className ? className + ' api-info-wrapper' : 'api-info-wrapper' },
-      value.descriptions && value.descriptions.length && _lodash2.default.map(value.descriptions, d => _react2.default.createElement(
+      value.descriptions && value.descriptions.length ? _lodash2.default.map(value.descriptions, d => _react2.default.createElement(
         'div',
         { key: d.id },
         _react2.default.createElement(_ApiDesc2.default, { className: 'api-description', value: d })
-      )),
+      )) : null,
       _lodash2.default.map(mapGroup, group => _react2.default.createElement(
         'div',
         { key: group.id },
         _react2.default.createElement(_ApiGroup2.default, { className: 'api-group', value: group }),
-        _lodash2.default.map(group.routes, route => _react2.default.createElement(_ApiRoute2.default, { className: 'api-route', key: route.id, relation: relationData, value: route }))
+        _lodash2.default.map(group.routes, route => _react2.default.createElement(_ApiRoute2.default, {
+          baseUrl: this.props.baseUrl || '',
+          className: 'api-route',
+          key: route.id,
+          relation: relationData,
+          value: route
+        }))
       )),
       value.objects && value.objects.length ? _react2.default.createElement(
         'div',
@@ -113,7 +119,13 @@ class ApiInfoWrapper extends _react2.default.Component {
           ),
           _react2.default.createElement('div', { className: 'panel-right text-center' })
         ),
-        _lodash2.default.map(value.objects, o => _react2.default.createElement(_ApiObject2.default, { key: o.id, relation: relationData, className: 'api-object', value: o }))
+        _lodash2.default.map(value.objects, o => _react2.default.createElement(_ApiObject2.default, {
+          key: o.id,
+          relation: relationData,
+          className: 'api-object',
+          value: o,
+          baseUrl: this.props.baseUrl || ''
+        }))
       ) : null,
       value.tuples && value.tuples.length ? _react2.default.createElement(
         'div',
@@ -128,7 +140,13 @@ class ApiInfoWrapper extends _react2.default.Component {
           ),
           _react2.default.createElement('div', { className: 'panel-right text-center' })
         ),
-        _lodash2.default.map(value.tuples, t => _react2.default.createElement(_ApiTuple2.default, { key: t.id, relation: relationData, className: 'api-tuple', value: t }))
+        _lodash2.default.map(value.tuples, t => _react2.default.createElement(_ApiTuple2.default, {
+          key: t.id,
+          relation: relationData,
+          className: 'api-tuple',
+          value: t,
+          baseUrl: this.props.baseUrl || ''
+        }))
       ) : null,
       value.codes && value.codes.length ? _react2.default.createElement(
         'div',
@@ -146,5 +164,6 @@ class ApiInfoWrapper extends _react2.default.Component {
 }
 exports.default = ApiInfoWrapper;
 ApiInfoWrapper.defaultProps = {
-  className: ''
+  className: '',
+  baseUrl: ''
 };

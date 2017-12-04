@@ -5,16 +5,19 @@
  * chaorong@maichong.it
  */
 
+// @flow
+
 import React from 'react';
 
-export default class RouteMethodDisplay extends React.Component {
+type Props = {
+  className?: string,
+  method: string,
+  url: string
+};
+
+export default class RouteMethodDisplay extends React.Component<Props> {
   static defaultProps = {
     className: ''
-  };
-  props: {
-    className?: string;
-    method: string;
-    url: string;
   };
 
   render() {

@@ -5,60 +5,113 @@
  * chaorong@maichong.it
  */
 
+// @flow
+
 import React from 'react';
 import _ from 'lodash';
+import { getMockData } from '../utils/field-mock';
 
-export default class CaseDataDisplay extends React.Component {
+type Props = {
+  className?: string,
+  index?: number,
+  next?: boolean,
+  wrapType: string, //包裹数据的外层类型
+  type: string, //展示的数据类型
+  value: Array<Object>
+  // 数组中为Field对象，同时在对象中增加了{children:{...model, fields: []}},
+  // model为Object、Tuple、Scope的字段
+};
+type State = {
+  activeObj: Array<string>,
+  objectType: Array<string>
+};
+
+export default class CaseDataDisplay extends React.Component<Props, State> {
   static defaultProps = {
     className: '',
     wrapType: '',
     index: 1,
     next: false
   };
-  props: {
-    className?: string;
-    index?: number;
-    next?: boolean;
-    wrapType: string; //包裹数据的外层类型
-    type: string; //展示的数据类型
-    value: Array<Object>;
-    // 数组中为Field对象，同时在对象中增加了{children:{...model, fields: []}},
-    // model为Object、Tuple、Scope的字段
-  };
-  state = {
-    activeObj: []
-  };
 
-  constructor(props: Object) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       objectType: ['object', 'scope', 'array', 'tuple', 'model'],
+      activeObj: []
       // open: false
     };
   }
 
-  toggleField = (f) => {
+  toggleField = (f: Object) => {
     let data = {};
     data[f.id] = !this.state[f.id];
     this.setState(data);
   };
 
-  getLeftMark = (type) => {
+  getLeftMark = (type: string) => {
     if (type === 'object' || type === 'scope') return '{';
     if (type === 'tuple') return '[';
     if (type === 'array') return '[';
     return '';
   };
 
-  getRightMark = (type) => {
+  getRightMark = (type: string) => {
     if (type === 'object' || type === 'scope') return '}';
     if (type === 'tuple') return ']';
     if (type === 'array') return ']';
     return '';
   };
 
+  getCaseValueEle = (f: Object): Object|null => {
+    let ele = null;
+    let fieldValue = getMockData(f);
+    if (_.isArray(fieldValue)) {
+      ele =
+        <span>
+          &#91;
+          &nbsp;
+          {
+            _.map(fieldValue || [], (v, index) => {
+              if (_.isObject(fieldValue)) {
+                return (
+                  <span key={index}>
+                    <span className={f.modelType}>{JSON.stringify(v)}</span>
+                    {index < (fieldValue.length - 1) ? <span>,&nbsp;</span> : ''}
+                  </span>
+                );
+              }
+              return (
+                <span key={index}>
+                  <span className={f.modelType}>{v.toString()}</span>
+                  {index < (fieldValue.length - 1) ? <span>,&nbsp;</span> : ''}
+                </span>
+              );
+            })
+          }
+          &nbsp;
+          &#93;
+        </span>;
+    } else if (_.isBoolean(fieldValue)) {
+      ele = <span className={f.fieldType}>{fieldValue.toString()}</span>;
+    } else if (_.isNull(fieldValue)) {
+      ele = <span className="null">null</span>;
+    } else if (_.isObject(fieldValue)) {
+      if (_.isEmpty(fieldValue)) {
+        ele = <span className={f.fieldType}>&#123;&nbsp;&nbsp;&#125;</span>;
+      } else {
+        ele = <span className={f.fieldType}>{JSON.stringify(fieldValue)}</span>;
+      }
+    } else {
+      ele = <span className={f.fieldType}>{fieldValue.toString()}</span>;
+    }
+    return ele;
+  };
+
   render() {
-    let { className, value, type, wrapType, next } = this.props;
+    let {
+      className, value, type, wrapType, next
+    } = this.props;
     let { objectType } = this.state;
     return (
       <div className={className ? className + ' case-data-display' : 'case-data-display'}>
@@ -88,10 +141,14 @@ export default class CaseDataDisplay extends React.Component {
                               <span className="colon">:</span>
                             </div> : null
                           }
-                          <div className="field-children-value">
+                          <div
+                            className={
+                            this.state[f.id] ? 'field-children-value open' : 'field-children-value'
+                            }
+                          >
                             <div className="property-show">
                               {
-                                this.props.index <= 2 ?
+                                this.props.index && this.props.index <= 2 ?
                                   <CaseDataDisplay
                                     index={this.props.index + 1}
                                     value={f.children.fields}
@@ -123,8 +180,8 @@ export default class CaseDataDisplay extends React.Component {
                             <span className="colon">:</span>
                           </span> : null
                         }
-                        <span className={f.fieldType ? 'value ' + f.fieldType : 'value'}>
-                          {f.mock || f.default || f.fieldType + '类型'}
+                        <span className="value">
+                          {this.getCaseValueEle(f) || f.mock || f.default || f.fieldType + '类型'}
                         </span>
                         {
                           index < value.length - 1 ? <span className="split">,</span> : null

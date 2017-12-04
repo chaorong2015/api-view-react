@@ -16,28 +16,37 @@ import ApiObject from './ApiObject';
 import ApiTuple from './ApiTuple';
 import ApiCode from './ApiCode';
 
-export default class ApiInfoWrapper extends React.Component {
+type Props = {
+  className?: string,
+  baseUrl?: string,
+  value: {
+    groups: Array<Object>,
+    routes: Array<Object>,
+    descriptions: Array<Object>,
+    objects: Array<Object>,
+    tuples: Array<Object>,
+    codes: Array<Object>,
+    fields: Array<Object>,
+    scopes: Array<Object>,
+    responses: Array<Object>
+  }
+};
+type State = {
+  mapGroup: Object
+};
+
+export default class ApiInfoWrapper extends React.Component<Props, State> {
   static defaultProps = {
-    className: ''
+    className: '',
+    baseUrl: ''
   };
-  props: {
-    className?: string;
-    value: {
-      groups: Array<Object>;
-      routes: Array<Object>;
-      descriptions: Array<Object>;
-      objects: Array<Object>;
-      tuples: Array<Object>;
-      schemas: Array<Object>;
-      codes: Array<Object>;
-      fields: Array<Object>;
-      scopes: Array<Object>;
-      responses: Array<Object>;
-    }
-  };
-  state = {
-    mapGroup: Object
-  };
+
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      mapGroup: {}
+    };
+  }
 
   //初始化分组
   getMapGroup(props:Object) {
@@ -76,9 +85,11 @@ export default class ApiInfoWrapper extends React.Component {
     return (
       <div className={className ? className + ' api-info-wrapper' : 'api-info-wrapper'}>
         {
-          value.descriptions && value.descriptions.length && _.map(value.descriptions, (d) => (
-            <div key={d.id}><ApiDesc className="api-description" value={d} /></div>
-          ))
+          value.descriptions && value.descriptions.length ? _.map(value.descriptions, (d) => (
+              <div key={d.id}>
+                <ApiDesc className="api-description" value={d} />
+              </div>
+            )) : null
         }
         {
           _.map(mapGroup, (group) => (
@@ -86,7 +97,13 @@ export default class ApiInfoWrapper extends React.Component {
               <ApiGroup className="api-group" value={group} />
               {
                 _.map(group.routes, (route) => (
-                  <ApiRoute className="api-route" key={route.id} relation={relationData} value={route} />
+                  <ApiRoute
+                    baseUrl={this.props.baseUrl || ''}
+                    className="api-route"
+                    key={route.id}
+                    relation={relationData}
+                    value={route}
+                  />
                 ))
               }
             </div>
@@ -101,7 +118,13 @@ export default class ApiInfoWrapper extends React.Component {
               </div>
               {
                 _.map(value.objects, (o) => (
-                  <ApiObject key={o.id} relation={relationData} className="api-object" value={o} />
+                  <ApiObject
+                    key={o.id}
+                    relation={relationData}
+                    className="api-object"
+                    value={o}
+                    baseUrl={this.props.baseUrl || ''}
+                  />
                 ))
               }
             </div> : null
@@ -115,7 +138,13 @@ export default class ApiInfoWrapper extends React.Component {
               </div>
               {
                 _.map(value.tuples, (t) => (
-                  <ApiTuple key={t.id} relation={relationData} className="api-tuple" value={t} />
+                  <ApiTuple
+                    key={t.id}
+                    relation={relationData}
+                    className="api-tuple"
+                    value={t}
+                    baseUrl={this.props.baseUrl || ''}
+                  />
                 ))
               }
             </div> : null

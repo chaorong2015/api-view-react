@@ -19,17 +19,9 @@ var _CaseDataDisplay2 = _interopRequireDefault(_CaseDataDisplay);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class ResponseCase extends _react2.default.Component {
+
   constructor(props) {
     super(props);
-    //测试
-    // this.test = {
-    //   value: [
-    //     {
-    //       code: 200, desc: '正确返回', value: [11]
-    //     },
-    //     { code: 400, desc: '错误返回', value: [222] }]
-    // };
-    // props = Object.assign({}, props, this.test);
     this.state = {
       response: props.value && props.value.length ? props.value[0] : {}
     };
@@ -38,8 +30,6 @@ class ResponseCase extends _react2.default.Component {
   render() {
     let { className, value, title } = this.props;
     let { response } = this.state;
-    //测试
-    // value = this.test.value;
     if (!value || !value.length) return _react2.default.createElement('div', null);
     // console.error('=======response', response);
     return _react2.default.createElement(
@@ -56,7 +46,7 @@ class ResponseCase extends _react2.default.Component {
         _lodash2.default.map(value, (r, index) => _react2.default.createElement(
           'div',
           { className: 'tab', key: index, onClick: () => this.setState({ response: r }) },
-          _react2.default.createElement('i', { className: r.code === 200 || r.code === '200' ? 'fa fa-circle text-success' : 'fa fa-circle text-danger'
+          _react2.default.createElement('i', { className: _lodash2.default.isNumber(r.code) && r.code <= 400 && r.code >= 200 ? 'fa fa-circle text-success' : 'fa fa-circle text-danger'
           }),
           _react2.default.createElement(
             'span',

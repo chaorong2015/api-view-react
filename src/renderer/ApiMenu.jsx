@@ -8,14 +8,41 @@
 
 import React from 'react';
 import _ from 'lodash';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { getLocalStorage, setLocalStorage } from './utils/local-storage';
+import ApiSearch from './ApiSearch';
+import type {
+  ApiDescription,
+  ApiGroup,
+  ApiObject,
+  ApiTuple,
+  ApiRoute
+} from '../../../types';
 
-export default class ApiMenu extends React.Component {
+type Props = {
+  className?: string,
+  mode?: string,
+  isDownload?: boolean,
+  baseUrl: string, //基础路由 例如 /[projectId]/api/[libraryPath]/[version]
+  value: {
+    groups: Array<ApiGroup>,
+    routes: Array<ApiRoute>,
+    descriptions: Array<ApiDescription>,
+    objects: Array<ApiObject>,
+    tuples: Array<ApiTuple>
+  }
+};
+
+type State = {
+  activeGroup: Array<string>
+};
+
+export default class ApiMenu extends React.Component<Props, State> {
   static defaultProps = {
     className: '',
     activeGroup: '',
     mode: 'view',
+    isDownload: false,
     baseUrl: '',
     value: {
       groups: [],
@@ -26,28 +53,10 @@ export default class ApiMenu extends React.Component {
       schemas: []
     }
   };
-  props: {
-    className?:string,
-    mode?:string,
-    // activeGroup?:Array<string>, //groupId 或者 key: object、tuple、schema
-    baseUrl:string, //基础路由 例如 /[projectId]/api/[libraryPath]/version/[version]
-    value: {
-      groups: Array<Object>,
-      routes: Array<Object>,
-      descriptions: Array<Object>,
-      objects: Array<Object>,
-      tuples: Array<Object>,
-      schemas: Array<Object>
-    }
-  };
 
-  state = {
-    activeGroup: []
-  };
-
-  constructor(props: Object) {
+  constructor(props: Props) {
     super(props);
-    let localActive = getLocalStorage('api-menu-active-group');
+    let localActive = !this.props.isDownload ? getLocalStorage('api-menu-active-group') : '';
     if (localActive && typeof localActive === 'string') {
       localActive = localActive.split(',');
     }
@@ -67,18 +76,18 @@ export default class ApiMenu extends React.Component {
     }
     // console.error('activeGroup:', activeGroup);
     this.setState({ activeGroup });
-    setLocalStorage('api-menu-active-group', activeGroup);
+    if(!this.props.isDownload) setLocalStorage('api-menu-active-group', activeGroup);
   };
   //获取路由
   getUrl = (type: string, id?: string) => {
-  let { baseUrl, mode } = this.props;
-  if (!id) {
-    return mode === 'view' ? baseUrl + '#' + type : baseUrl + '/' + type;
-  }
-  return mode === 'view' ? baseUrl + '#' + type + '-' + id : baseUrl + '/' + type + '/' + id;
+    let { baseUrl, mode } = this.props;
+    if (!id) {
+      return mode === 'view' ? baseUrl + '#' + type : baseUrl + '/' + type;
+    }
+    return mode === 'view' ? baseUrl + '#' + type + '-' + id : baseUrl + '/' + type + '/' + id;
   };
   //初始化分组
-  getMapGroup(props:Object) {
+  getMapGroup(props:Props) {
     let { value } = props;
     let mapGroup = {};
     if (value.groups) {
@@ -92,9 +101,7 @@ export default class ApiMenu extends React.Component {
       });
       _.map(value.routes, (route) => {
         if (route.group && mapGroup[route.group]) {
-          mapGroup[route.group].routes.push(
-            Object.assign({ url: this.getUrl('route', route.id) }, route)
-          );
+          mapGroup[route.group].routes.push(Object.assign({ url: this.getUrl('route', route.id) }, route));
         }
       });
     }
@@ -102,12 +109,16 @@ export default class ApiMenu extends React.Component {
   }
 
   render() {
-    let { value, className, mode, baseUrl } = this.props;
+    let {
+      value, className, mode, baseUrl
+    } = this.props;
     let { activeGroup } = this.state;
     let mapGroup = this.getMapGroup(this.props);
-    //console.log('======value', value);
     return (
       <div className={className ? className + ' api-menu' : 'api-menu'}>
+        {
+          this.props.isDownload ? <ApiSearch /> : null
+        }
         {
           mode !== 'view' ?
             <Link to={`${baseUrl}/library`} className="group group-setting">设置</Link> : null
@@ -119,12 +130,16 @@ export default class ApiMenu extends React.Component {
                 key={desc.id}
                 to={this.getUrl('description', desc.id)}
                 className="group group-description"
-              >{desc.title}</Link> :
+              >
+                {desc.title}
+              </Link> :
               <a
                 key={desc.id}
                 href={this.getUrl('description', desc.id)}
                 className="group group-description"
-              >{desc.title}</a>
+              >
+                {desc.title}
+              </a>
           ))
         }
         {
@@ -148,13 +163,13 @@ export default class ApiMenu extends React.Component {
                 }
                 {
                   group.routes && group.routes.length ?
-                    <span
+                    <div
                       className="icon icon-link pull-right padding-h-sm"
                       onClick={() => this.openSub(group.id)}
                     >
-                        <i className="fa fa-angle-right" />
-                        <i className="fa fa-angle-down" />
-                      </span> : null
+                      <i className="fa fa-angle-right" />
+                      <i className="fa fa-angle-down" />
+                    </div> : null
                 }
               </div>
               {
@@ -166,7 +181,9 @@ export default class ApiMenu extends React.Component {
                         key={route.id}
                         to={this.getUrl('route', route.id)}
                         className="sub sub-route"
-                      >{route.title}</Link>
+                      >
+                        {route.title}
+                      </Link>
                     );
                   }
                   return (
@@ -174,7 +191,9 @@ export default class ApiMenu extends React.Component {
                       key={route.id}
                       href={this.getUrl('route', route.id)}
                       className="sub sub-route"
-                    >{route.title}</a>
+                    >
+                      {route.title}
+                    </a>
                   );
                 })
               }
@@ -218,13 +237,13 @@ export default class ApiMenu extends React.Component {
             <div className="group group-object flex">元组</div>
             {
               value.tuples && value.tuples.length ?
-                <span
+                <div
                   className="icon icon-link pull-right padding-h-sm"
                   onClick={() => this.openSub('tuple')}
                 >
-                    <i className="fa fa-angle-right" />
-                    <i className="fa fa-angle-down" />
-                  </span> : null
+                  <i className="fa fa-angle-right" />
+                  <i className="fa fa-angle-down" />
+                </div> : null
             }
           </div>
           {

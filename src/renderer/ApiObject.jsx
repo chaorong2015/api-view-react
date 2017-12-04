@@ -5,6 +5,8 @@
  * chaorong@maichong.it
  */
 
+// @flow
+
 import _ from 'lodash';
 import React from 'react';
 import BaseInfo from './components/BaseInfo';
@@ -13,25 +15,27 @@ import ModelCase from './components/ModelCase';
 import ScopeDisplay from './components/ScopeDisplay';
 import { getFieldsOfModel } from './utils/field-manage';
 
-export default class ApiObject extends React.Component {
+type Props = {
+  baseUrl?: string,
+  className?: string,
+  value: Object,
+  relation: {
+    objects: Array<Object>,
+    tuples: Array<Object>,
+    fields: Array<Object>,
+    scopes: Array<Object>
+  }
+};
+
+export default class ApiObject extends React.Component<Props> {
   static defaultProps = {
-    className: ''
-  };
-  props: {
-    className?: string;
-    value: Object;
-    relation: {
-      objects: Array<Object>;
-      tuples: Array<Object>;
-      schemas: Array<Object>;
-      fields: Array<Object>;
-      scopes: Array<Object>
-    }
+    className: '',
+    baseUrl: ''
   };
 
-  getScopes(props) {
-    let { value, relation } = props;
-    return _.filter(relation.scopes, (s) => s.object.toString() === value.id.toString());
+  getScopes() {
+    let { value, relation } = this.props;
+    return _.filter(relation.scopes, (s) => s.object === value.id);
   }
 
   render() {
@@ -41,7 +45,7 @@ export default class ApiObject extends React.Component {
       className = className + ' ' + this.props.className;
     }
     let fields = getFieldsOfModel(value, relation);
-    let scopes = this.getScopes(this.props);
+    let scopes = this.getScopes();
     return (
       <div className={className} id={'object-' + value.id}>
         <div className="panel-left">
@@ -50,7 +54,7 @@ export default class ApiObject extends React.Component {
             fields && fields.length ?
               <div className="object">
                 <div className="padding-sm-v">属性</div>
-                <FieldDisplay value={fields} />
+                <FieldDisplay baseUrl={this.props.baseUrl} value={fields} />
               </div> : null
           }
           {

@@ -5,21 +5,24 @@
  * chaorong@maichong.it
  */
 
+// @flow
+
 import _ from 'lodash';
 import React from 'react';
 import CheckBox from './CheckBox';
 
-export default class extends React.Component {
+type Props = {
+  className?: string,
+  value: {
+    title: string,
+    scopes: Array<Object>,
+    fields: Array<Object>
+  }
+};
+
+export default class extends React.Component<Props> {
   static defaultProps = {
     className: ''
-  };
-
-  props: {
-    className?: string;
-    value: {
-      title: string;
-      scopes: Array<Object>
-    };
   };
 
   render() {
@@ -28,7 +31,7 @@ export default class extends React.Component {
       'object-scope-display ' + this.props.className : 'object-scope-display';
     return (
       <div className={className}>
-        <div className="title">Scopes列表</div>
+        <div className="padding-v-sm">Scopes列表</div>
         <div className="scope-table-panel">
           <table>
             <thead>
@@ -56,7 +59,7 @@ export default class extends React.Component {
                       <span className="scope-title">{field.title}</span>
                     </td>
                     <td>
-                      <CheckBox checked disabled />
+                      <CheckBox checked disabled onChange={() => {}} />
                     </td>
                     {
                       value.scopes && value.scopes.map((scope) => (
@@ -64,6 +67,7 @@ export default class extends React.Component {
                           <CheckBox
                             checked={_.indexOf(scope.fields, field.title) < 0}
                             disabled
+                            onChange={() => {}}
                           />
                         </td>
                       ))

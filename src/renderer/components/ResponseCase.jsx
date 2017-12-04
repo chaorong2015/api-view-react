@@ -5,40 +5,35 @@
  * chaorong@maichong.it
  */
 
+// @flow
+
 import React from 'react';
 import _ from 'lodash';
 import CaseDataDisplay from './CaseDataDisplay';
 
-export default class ResponseCase extends React.Component {
+type Props = {
+  className?: string;
+  title: string;
+  value: Array<{
+    code:number,
+    desc:string,
+    fields: Array<Object>;
+    // 数组中为Field对象，同时在对象中增加了{children:{...model, fields: []}},
+    // model为Object、Tuple、Scope的字段
+  }>;
+};
+
+type State = {
+  response: Object;
+};
+
+export default class ResponseCase extends React.Component<Props, State> {
   static defaultProps = {
     className: ''
   };
-  props: {
-    className?: string;
-    title: string;
-    value: Array<{
-      code:string|number,
-      desc:string,
-      fields: Array<Object>;
-      // 数组中为Field对象，同时在对象中增加了{children:{...model, fields: []}},
-      // model为Object、Tuple、Scope的字段
-    }>;
-  };
 
-  state: {
-    response: Object;
-  };
-  constructor(props) {
+  constructor(props:Object) {
     super(props);
-    //测试
-    // this.test = {
-    //   value: [
-    //     {
-    //       code: 200, desc: '正确返回', value: [11]
-    //     },
-    //     { code: 400, desc: '错误返回', value: [222] }]
-    // };
-    // props = Object.assign({}, props, this.test);
     this.state = {
       response: props.value && props.value.length ? props.value[0] : {}
     };
@@ -47,8 +42,6 @@ export default class ResponseCase extends React.Component {
   render() {
     let { className, value, title } = this.props;
     let { response } = this.state;
-    //测试
-    // value = this.test.value;
     if (!value || !value.length) return <div />;
     // console.error('=======response', response);
     return (
@@ -59,7 +52,8 @@ export default class ResponseCase extends React.Component {
             _.map(value, (r, index) => (
               <div className="tab" key={index} onClick={() => this.setState({ response: r })}>
                 <i className={
-                  r.code === 200 || r.code === '200' ? 'fa fa-circle text-success' : 'fa fa-circle text-danger'
+                  _.isNumber(r.code) && r.code <= 400 && r.code >= 200 ?
+                  'fa fa-circle text-success' : 'fa fa-circle text-danger'
                 }
                 />
                 <span className="tab-code">{r.code}</span>

@@ -20,7 +20,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * params 要查找的model所对应的过滤条件，即所属项目，所属库，所属版本
  * relationData 相关联的所有数据
  * 返回数据  返回一个模型的所有数据，例如User$Base里的数据
-* */
+ * */
 function getModelByTitle(title, type, params, relationData) {
   if (!title) {
     throw new Error('title:string is required in getModelByTitle');
@@ -76,11 +76,11 @@ function getModelByTitle(title, type, params, relationData) {
  * fieldType 字段里type里保存的类型，例如 User$Base[]
  * 返回数据  返回一个与类型相关的数据
  * 例如 {
-     modelType: 'scope', //模型的类型
-     modelTitle: 'User$Base', //模型的title
-     fieldType: 'array', //字段的类型
-     hasFields: true //是否有字段数组
-   };
+ modelType: 'scope', //模型的类型
+ modelTitle: 'User$Base', //模型的title
+ fieldType: 'array', //字段的类型
+ hasFields: true //是否有字段数组
+ };
  * */
 /**
  * 脉冲软件
@@ -88,6 +88,7 @@ function getModelByTitle(title, type, params, relationData) {
  * @Created by Rong on 2017/11/17.
  * @author Rong <chaorong@maichong.it>
  */
+
 function getSimpleModelByFieldType(fieldType) {
   if (!fieldType) return {};
   if (typeof fieldType !== 'string') {
@@ -102,21 +103,21 @@ function getSimpleModelByFieldType(fieldType) {
   if (/^(.+)\[\]$/.test(fieldType)) {
     model.fieldType = 'array';
     let typeArr = fieldType.match(/^(.+)\[\]/);
-    if (typeArr[1] !== 'string') {
+    if (typeArr && typeArr[1] !== 'string' && typeArr[1] !== 'number' && typeArr[1] !== 'object') {
       model.hasFields = true;
       let temp = getSimpleModelByFieldType(typeArr[1]);
       model.modelType = temp.modelType;
       model.modelTitle = temp.modelTitle;
       return model;
     }
-    model.modelType = 'string';
+    model.modelType = typeArr ? typeArr[1] : '';
     return model;
   }
   if (/^\[(.+)\]$/.test(fieldType)) {
     let typeArr = fieldType.match(/^\[(.+)\]$/);
     model.fieldType = 'model';
     model.modelType = 'tuple';
-    model.modelTitle = typeArr[1];
+    model.modelTitle = typeArr ? typeArr[1] : '';
     model.hasFields = true;
     return model;
   }
@@ -257,6 +258,29 @@ function getFieldsOfModel(model, relationData, i) {
           f = Object.assign({}, f, { children }, temp);
           results.push(f);
         }
+      } else if (f.type === 'union') {
+        if (f.options && f.options.unionType && f.options.unionType.length) {
+          let t = f.options.unionType[0];
+          let imitateField = {
+            project: field.project,
+            library: field.library,
+            version: field.version,
+            type: t
+          };
+          let temp = getModelOfFieldType(imitateField, relationData || []);
+          if (temp) {
+            let children = Object.assign({}, temp, { fields: getFieldsOfModel(temp, relationData, i + 1) });
+            let sm = getSimpleModelByFieldType(imitateField.type || '');
+            f = Object.assign({}, f, { children }, sm);
+            results.push(f);
+          } else {
+            let sm = getSimpleModelByFieldType(imitateField.type || '');
+            results.push(Object.assign({}, f, sm));
+          }
+        } else {
+          let sm = getSimpleModelByFieldType(f.type || '');
+          results.push(Object.assign({}, f, sm));
+        }
       } else {
         //其他类型字段
         let temp = getSimpleModelByFieldType(f.type || '');
@@ -300,15 +324,15 @@ function filterRouteFieldsByType(type, fields) {
  * relationData 相关联的所有数据
  * */
 function getFieldsOfBody(route, relationData) {
-  if (!route.bodyType) return [];
+  if (!route.bodyType) return null;
   if (route.bodyType !== '{}') {
     let simpleModel = getSimpleModelByFieldType(route.bodyType);
-    if (!simpleModel.modelTitle) return [];
+    if (!simpleModel.modelTitle) return null;
     if (route.project) route.project = route.library.split('/')[0];
     let params = { project: route.project, library: route.library, version: route.version };
     let model = getModelByTitle(simpleModel.modelTitle, simpleModel.modelType, params, relationData);
-    if (!model) return [];
-    let fields = getFieldsOfModel(model, relationData, simpleModel.modelType === 'scope');
+    if (!model) return null;
+    let fields = getFieldsOfModel(model, relationData);
     return Object.assign({}, model, simpleModel, { fields });
   }
   let fields = getFieldsOfModel(route, relationData);
@@ -336,7 +360,7 @@ function getFieldsOfResponse(route, relationData) {
         let params = { project: response.project, library: response.library, version: response.version };
         let model = getModelByTitle(simpleModel.modelTitle, simpleModel.modelType, params, relationData);
         if (!model) return;
-        let fields = getFieldsOfModel(model, relationData, simpleModel.modelType === 'scope');
+        let fields = getFieldsOfModel(model, relationData);
         responses.push(Object.assign({}, response, simpleModel, { fields }));
         return;
       }

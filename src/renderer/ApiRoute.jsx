@@ -5,6 +5,8 @@
  * chaorong@maichong.it
  */
 
+// @flow
+
 import React from 'react';
 import _ from 'lodash';
 import BaseInfo from './components/BaseInfo';
@@ -14,24 +16,26 @@ import RequestCase from './components/RequestCase';
 import RouteMethodDisplay from './components/RouteMethodDisplay';
 import { getFieldsOfModel, filterRouteFieldsByType, getFieldsOfBody, getFieldsOfResponse } from './utils/field-manage';
 
-export default class ApiRoute extends React.Component {
+type Props = {
+  className?: string,
+  baseUrl?: string,
+  value: Object,
+  relation: {
+    objects: Array<Object>,
+    tuples: Array<Object>,
+    fields: Array<Object>,
+    scopes: Array<Object>,
+    responses: Array<Object>
+  }
+};
+
+export default class ApiRoute extends React.Component<Props> {
   static defaultProps = {
-    className: ''
-  };
-  props: {
-    className?: string;
-    value: Object;
-    relation: {
-      objects: Array<Object>;
-      tuples: Array<Object>;
-      schemas: Array<Object>;
-      fields: Array<Object>;
-      scopes: Array<Object>;
-      responses: Array<Object>;
-    }
+    className: '',
+    baseUrl: '',
   };
 
-  getMarkEle() {
+  getMarkEle():Object {
     let { value } = this.props;
     let stability = '';
     if (value.stability) {
@@ -59,17 +63,19 @@ export default class ApiRoute extends React.Component {
         default: stability = '';
       }
     }
-    return (<span>
-      {
-        stability ? <span className="stability"> {stability} </span> : null
-      }
-      {
-        value.since ? <span className="since">Since&nbsp;&nbsp;{value.since} </span> : null
-      }
-      {
-        value.state ? <span className="state">{value.state} </span> : null
-      }
-    </span>);
+    return (
+      <span>
+        {
+          stability ? <span className="stability"> {stability} </span> : null
+        }
+        {
+          value.since ? <span className="since">Since&nbsp;&nbsp;{value.since} </span> : null
+        }
+        {
+          value.state ? <span className="state">{value.state} </span> : null
+        }
+      </span>
+    );
   }
 
   render() {
@@ -84,6 +90,7 @@ export default class ApiRoute extends React.Component {
     let fieldsRouteQuery = filterRouteFieldsByType('route:query', fields);
     let fieldsRouteBody = getFieldsOfBody(value, relation);
     let responseArr = getFieldsOfResponse(value, relation);
+    responseArr = _.orderBy(responseArr, ['code'], ['asc']);
     return (
       <div className={className} id={'route-' + value.id}>
         <div className="panel-left">
@@ -99,14 +106,14 @@ export default class ApiRoute extends React.Component {
             fieldsRoutePath && fieldsRoutePath.length ?
               <div className="padding-top">
                 <div className="title-left-border">路径参数</div>
-                <FieldDisplay value={fieldsRoutePath} />
+                <FieldDisplay baseUrl={this.props.baseUrl} value={fieldsRoutePath} />
               </div> : null
           }
           {
             fieldsRouteQuery && fieldsRouteQuery.length ?
               <div className="padding-top">
                 <div className="title-left-border">查询参数</div>
-                <FieldDisplay value={fieldsRouteQuery} />
+                <FieldDisplay baseUrl={this.props.baseUrl} value={fieldsRouteQuery} />
               </div> : null
           }
           {
@@ -119,54 +126,59 @@ export default class ApiRoute extends React.Component {
                 {
                   fieldsRouteBody.modelTitle ?
                     <div className="padding-v-sm">
-                      <div className="desc">
-                        返回结果为
-                        { fieldsRouteBody.fieldType === 'object' || fieldsRouteBody.fieldType === 'scope' ?
-                          fieldsRouteBody.modelTitle + ',类型为Object' : null}
-                        { fieldsRouteBody.fieldType === 'tuple' ?
-                          '[ ' + fieldsRouteBody.modelTitle + ' ],类型为Array' : null}
-                        { fieldsRouteBody.fieldType === 'array' ? fieldsRouteBody.modelTitle + ' [ ],类型为Array' : null}
-                        ,{fieldsRouteBody.fieldType === 'tuple' ? '[ ' + fieldsRouteBody.modelTitle + ' ]'
-                          : fieldsRouteBody.modelTitle}属性信息如下
-                      </div>
-                      <FieldDisplay className="flex" value={fieldsRouteBody.fields} />
+                      {
+                        fieldsRouteBody.bodyType !== '{}' ?
+                          <div className="desc">
+                            请求数据为{fieldsRouteBody.bodyType}
+                            {
+                              fieldsRouteBody.fieldType === 'tuple' ?
+                                '[ ' + fieldsRouteBody.modelTitle + ' ]' : fieldsRouteBody.modelTitle
+                            }属性信息如下
+                          </div> : null
+                      }
+                      <FieldDisplay baseUrl={this.props.baseUrl} className="flex" value={fieldsRouteBody.fields} />
                     </div> :
-                    <FieldDisplay className="flex" value={fieldsRouteBody.fields} />
+                    <FieldDisplay baseUrl={this.props.baseUrl} className="flex" value={fieldsRouteBody.fields} />
                 }
               </div> : null
           }
           {
             responseArr && responseArr.length ?
-              <div>
+              <div className="padding-top">
                 <div className="title-left-border">
                   返回结果
                 </div>
                 {
                   _.map(responseArr, (r) => (
-                    <div className="padding-v" key={r.id}>
-                      <div className="code-desc">
+                    <div className="padding-top" key={r.id}>
+                      <div
+                        className={
+                          _.isNumber(r.code) && r.code <= 400 && r.code >= 200 ?
+                          'code-desc text-success' : 'code-desc text-danger'
+                        }
+                      >
                         <span className="padding-right-sm">
                           {r.code}
                         </span>
-                        <span className="desc">
+                        <span>
                           {r.desc}
                         </span>
                       </div>
                       {
                         r.modelTitle ?
                           <div className="padding-v-sm">
-                            <div className="desc">
-                              返回结果为
-                              { r.fieldType === 'object' || r.fieldType === 'scope' ?
-                                r.modelTitle + ',类型为Object' : null
-                              }
-                              { r.fieldType === 'tuple' ? '[ ' + r.modelTitle + ' ],类型为Array' : null}
-                              { r.fieldType === 'array' ? r.modelTitle + ' [ ],类型为Array' : null}
-                              ,{r.fieldType === 'tuple' ? '[ ' + r.modelTitle + ' ]' : r.modelTitle}属性信息如下
-                            </div>
-                            <FieldDisplay className="flex" value={r.fields} />
+                            {
+                              r.type !== '{}' ?
+                                <div className="desc">
+                                  返回结果为{ r.type},
+                                  {
+                                    r.fieldType === 'tuple' ? '[ ' + r.modelTitle + ' ]' : r.modelTitle
+                                  }属性信息如下
+                                </div> : null
+                            }
+                            <FieldDisplay baseUrl={this.props.baseUrl} className="flex" value={r.fields} />
                           </div> :
-                          <FieldDisplay className="flex" value={r.fields} />
+                          <FieldDisplay baseUrl={this.props.baseUrl} className="flex" value={r.fields} />
                       }
                     </div>
                   ))
@@ -176,7 +188,7 @@ export default class ApiRoute extends React.Component {
         </div>
         <div className="panel-right text-center">
           <RouteMethodDisplay method={value.method} url={value.path} />
-          <RequestCase title="请求示例" value={fieldsRouteBody} />
+          <RequestCase title="请求示例" value={fieldsRouteBody || { fieldType: '', modelType: '', fields: [] }} />
           <ResponseCase title="响应示例" value={responseArr} />
         </div>
       </div>

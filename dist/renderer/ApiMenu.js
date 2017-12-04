@@ -12,25 +12,20 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _reactRouter = require('react-router');
+var _reactRouterDom = require('react-router-dom');
 
 var _localStorage = require('./utils/local-storage');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _ApiSearch = require('./ApiSearch');
 
-/**
- * @copyright Maichong Software Ltd. 2017 http://maichong.it
- * @date 2017-11-10
- * @author Pang <pang@maichong.it>
- */
+var _ApiSearch2 = _interopRequireDefault(_ApiSearch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class ApiMenu extends _react2.default.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      activeGroup: []
-    };
 
     this.openSub = id => {
       let { activeGroup } = this.state;
@@ -42,7 +37,7 @@ class ApiMenu extends _react2.default.Component {
       }
       // console.error('activeGroup:', activeGroup);
       this.setState({ activeGroup });
-      (0, _localStorage.setLocalStorage)('api-menu-active-group', activeGroup);
+      if (!this.props.isDownload) (0, _localStorage.setLocalStorage)('api-menu-active-group', activeGroup);
     };
 
     this.getUrl = (type, id) => {
@@ -53,7 +48,7 @@ class ApiMenu extends _react2.default.Component {
       return mode === 'view' ? baseUrl + '#' + type + '-' + id : baseUrl + '/' + type + '/' + id;
     };
 
-    let localActive = (0, _localStorage.getLocalStorage)('api-menu-active-group');
+    let localActive = !this.props.isDownload ? (0, _localStorage.getLocalStorage)('api-menu-active-group') : '';
     if (localActive && typeof localActive === 'string') {
       localActive = localActive.split(',');
     }
@@ -89,20 +84,22 @@ class ApiMenu extends _react2.default.Component {
   }
 
   render() {
-    let { value, className, mode, baseUrl } = this.props;
+    let {
+      value, className, mode, baseUrl
+    } = this.props;
     let { activeGroup } = this.state;
     let mapGroup = this.getMapGroup(this.props);
-    //console.log('======value', value);
     return _react2.default.createElement(
       'div',
       { className: className ? className + ' api-menu' : 'api-menu' },
+      this.props.isDownload ? _react2.default.createElement(_ApiSearch2.default, null) : null,
       mode !== 'view' ? _react2.default.createElement(
-        _reactRouter.Link,
+        _reactRouterDom.Link,
         { to: `${baseUrl}/library`, className: 'group group-setting' },
         '\u8BBE\u7F6E'
       ) : null,
       _lodash2.default.map(value.descriptions, desc => mode !== 'view' ? _react2.default.createElement(
-        _reactRouter.Link,
+        _reactRouterDom.Link,
         {
           key: desc.id,
           to: this.getUrl('description', desc.id),
@@ -125,7 +122,7 @@ class ApiMenu extends _react2.default.Component {
           'div',
           { className: 'display-flex' },
           mode !== 'view' ? _react2.default.createElement(
-            _reactRouter.Link,
+            _reactRouterDom.Link,
             {
               to: this.getUrl('group', group.id),
               className: 'group group-route flex'
@@ -140,7 +137,7 @@ class ApiMenu extends _react2.default.Component {
             group.title
           ),
           group.routes && group.routes.length ? _react2.default.createElement(
-            'span',
+            'div',
             {
               className: 'icon icon-link pull-right padding-h-sm',
               onClick: () => this.openSub(group.id)
@@ -153,7 +150,7 @@ class ApiMenu extends _react2.default.Component {
           //console.log('======route', route);
           if (mode !== 'view') {
             return _react2.default.createElement(
-              _reactRouter.Link,
+              _reactRouterDom.Link,
               {
                 key: route.id,
                 to: this.getUrl('route', route.id),
@@ -195,7 +192,7 @@ class ApiMenu extends _react2.default.Component {
           ) : null
         ),
         _lodash2.default.map(value.objects, o => mode !== 'view' ? _react2.default.createElement(
-          _reactRouter.Link,
+          _reactRouterDom.Link,
           { key: o.id, to: this.getUrl('object', o.id), className: 'sub sub-object' },
           o.title,
           o.share ? _react2.default.createElement(
@@ -226,7 +223,7 @@ class ApiMenu extends _react2.default.Component {
             '\u5143\u7EC4'
           ),
           value.tuples && value.tuples.length ? _react2.default.createElement(
-            'span',
+            'div',
             {
               className: 'icon icon-link pull-right padding-h-sm',
               onClick: () => this.openSub('tuple')
@@ -236,7 +233,7 @@ class ApiMenu extends _react2.default.Component {
           ) : null
         ),
         _lodash2.default.map(value.tuples, t => mode !== 'view' ? _react2.default.createElement(
-          _reactRouter.Link,
+          _reactRouterDom.Link,
           { key: t.id, to: this.getUrl('tuple', t.id), className: 'sub sub-tuple' },
           '[',
           t.title,
@@ -263,7 +260,7 @@ class ApiMenu extends _react2.default.Component {
         'div',
         { className: activeGroup.indexOf('code') < 0 ? 'menu' : 'menu active' },
         mode !== 'view' ? _react2.default.createElement(
-          _reactRouter.Link,
+          _reactRouterDom.Link,
           { to: this.getUrl('code'), className: 'group group-code' },
           '\u72B6\u6001\u7801'
         ) : _react2.default.createElement(
@@ -275,11 +272,17 @@ class ApiMenu extends _react2.default.Component {
     );
   }
 }
-exports.default = ApiMenu;
+exports.default = ApiMenu; /**
+                            * @copyright Maichong Software Ltd. 2017 http://maichong.it
+                            * @date 2017-11-10
+                            * @author Pang <pang@maichong.it>
+                            */
+
 ApiMenu.defaultProps = {
   className: '',
   activeGroup: '',
   mode: 'view',
+  isDownload: false,
   baseUrl: '',
   value: {
     groups: [],

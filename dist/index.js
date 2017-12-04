@@ -20,5 +20,5 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function parseReact(data) {
   // let content = renderToString(<Index value={data} />);
   // let content = renderToStaticMarkup(<Index value={data} />);
-  return (0, _server.renderToStaticMarkup)(_react2.default.createElement(_Index2.default, { value: data }));
+  return (0, _server.renderToStaticMarkup)(_react2.default.createElement(_Index2.default, { value: data, isDownload: true }));
 }
