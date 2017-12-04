@@ -103,7 +103,7 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
         ele = <span className={f.fieldType}>{JSON.stringify(fieldValue)}</span>;
       }
     } else {
-      ele = <span className={f.fieldType}>{fieldValue.toString()}</span>;
+      ele = <span className={f.fieldType}>{fieldValue ? fieldValue.toString() : ''}</span>;
     }
     return ele;
   };

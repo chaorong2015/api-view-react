@@ -113,7 +113,7 @@ class CaseDataDisplay extends _react2.default.Component {
         ele = _react2.default.createElement(
           'span',
           { className: f.fieldType },
-          fieldValue.toString()
+          fieldValue ? fieldValue.toString() : ''
         );
       }
       return ele;

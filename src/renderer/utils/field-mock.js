@@ -9,6 +9,7 @@
 
 import _ from 'lodash';
 import Mock from 'mockjs';
+import vm from 'vm';
 
 export function getMockData(field:Object, index?:number|null):any {
   if (!index) index = 0;
@@ -24,7 +25,7 @@ export function getMockData(field:Object, index?:number|null):any {
       if (/^Mock.+\([^;]*\);?$/.test(value)) {
         try {
           //todo 替换eval方法
-          obj.value = eval(value);
+          obj.value = vm.runInNewContext(value);
         } catch (err) {
           obj.value = '';
         }
@@ -77,7 +78,7 @@ export function getMockData(field:Object, index?:number|null):any {
       if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
           //todo 替换eval方法
-          let v = eval(value);
+          let v = vm.runInNewContext(value);
           if (v instanceof Array) {
             obj.value = v;
           }
@@ -147,10 +148,10 @@ export function getMockData(field:Object, index?:number|null):any {
       obj.value = parseFloat(defaultValue) || 0;
       //是否有示例值
     } else if (value) {
-      if (/^Mock.+\([^;]+\);?$/.test(value)) {
+      if (/^Mock.+\([^;]*\);?$/.test(value)) {
         try {
           //todo 替换eval方法
-          let v = eval(value);
+          let v = vm.runInNewContext(value);
           if (typeof v === 'number') {
             obj.value = v;
           }
@@ -183,7 +184,7 @@ export function getMockData(field:Object, index?:number|null):any {
       if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
           //todo 替换eval方法
-          let v = eval(value);
+          let v = vm.runInNewContext(value);
           if (v instanceof Array) {
             obj.value = v;
           } else {
@@ -228,9 +229,9 @@ export function getMockData(field:Object, index?:number|null):any {
     if (defaultValue && defaultValue === 'false') {
       obj.value = false;
     } else if (value) {
-      if (/^Mock.+\([^;]+\);?$/.test(value)) {
+      if (/^Mock.+\([^;]*\);?$/.test(value)) {
         try {
-          let v = eval(value);
+          let v = vm.runInNewContext(value);
           obj.value = v;
         } catch (err) {
           obj.value = false;
@@ -252,7 +253,7 @@ export function getMockData(field:Object, index?:number|null):any {
       if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
           //todo 替换eval方法
-          let v = eval(value);
+          let v = vm.runInNewContext(value);
           if (v instanceof Array) {
             obj.value = v;
           } else {
@@ -291,9 +292,9 @@ export function getMockData(field:Object, index?:number|null):any {
     if (defaultValue) {
       obj.value = defaultValue;
     } else if (value) {
-      if (/^Mock.+\([^;]+\);?$/.test(value)) {
+      if (/^Mock.+\([^;]*\);?$/.test(value)) {
         try {
-          let v = eval(value);
+          let v = vm.runInNewContext(value);
           obj.value = v;
         } catch (err) {
           obj.value = 1;
@@ -322,7 +323,7 @@ export function getMockData(field:Object, index?:number|null):any {
       if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
           //todo 替换eval方法
-          obj.value = eval(value);
+          obj.value = vm.runInNewContext(value);
         } catch (err) {
           obj.value = 0;
         }

@@ -31,22 +31,12 @@ type Props = {
     responses: Array<Object>
   }
 };
-type State = {
-  mapGroup: Object
-};
 
-export default class ApiInfoWrapper extends React.Component<Props, State> {
+export default class ApiInfoWrapper extends React.Component<Props> {
   static defaultProps = {
     className: '',
     baseUrl: ''
   };
-
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      mapGroup: {}
-    };
-  }
 
   //初始化分组
   getMapGroup(props:Object) {
@@ -62,9 +52,7 @@ export default class ApiInfoWrapper extends React.Component<Props, State> {
       });
       _.map(value.routes, (route) => {
         if (route.group && mapGroup[route.group]) {
-          mapGroup[route.group].routes.push(
-            Object.assign(route)
-          );
+          mapGroup[route.group].routes.push(route);
         }
       });
     }
@@ -77,7 +65,6 @@ export default class ApiInfoWrapper extends React.Component<Props, State> {
     let relationData = {
       objects: value.objects,
       tuples: value.tuples,
-      schemas: value.schemas,
       fields: value.fields,
       scopes: value.scopes,
       responses: value.responses
@@ -86,9 +73,9 @@ export default class ApiInfoWrapper extends React.Component<Props, State> {
       <div className={className ? className + ' api-info-wrapper' : 'api-info-wrapper'}>
         {
           value.descriptions && value.descriptions.length ? _.map(value.descriptions, (d) => (
-              <div key={d.id}>
-                <ApiDesc className="api-description" value={d} />
-              </div>
+            <div key={d.id}>
+              <ApiDesc className="api-description" value={d} />
+            </div>
             )) : null
         }
         {

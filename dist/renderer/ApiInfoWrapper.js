@@ -47,13 +47,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 class ApiInfoWrapper extends _react2.default.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      mapGroup: {}
-    };
-  }
-
   //初始化分组
   getMapGroup(props) {
     let { value } = props;
@@ -68,7 +61,7 @@ class ApiInfoWrapper extends _react2.default.Component {
       });
       _lodash2.default.map(value.routes, route => {
         if (route.group && mapGroup[route.group]) {
-          mapGroup[route.group].routes.push(Object.assign(route));
+          mapGroup[route.group].routes.push(route);
         }
       });
     }
@@ -81,7 +74,6 @@ class ApiInfoWrapper extends _react2.default.Component {
     let relationData = {
       objects: value.objects,
       tuples: value.tuples,
-      schemas: value.schemas,
       fields: value.fields,
       scopes: value.scopes,
       responses: value.responses

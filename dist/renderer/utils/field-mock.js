@@ -13,14 +13,11 @@ var _mockjs = require('mockjs');
 
 var _mockjs2 = _interopRequireDefault(_mockjs);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _vm = require('vm');
 
-/**
- * 脉冲软件
- * http://maichong.it
- * @Created by Rong on 2017/11/25.
- * @author Rong <chaorong@maichong.it>
- */
+var _vm2 = _interopRequireDefault(_vm);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getMockData(field, index) {
   if (!index) index = 0;
@@ -36,7 +33,7 @@ function getMockData(field, index) {
       if (/^Mock.+\([^;]*\);?$/.test(value)) {
         try {
           //todo 替换eval方法
-          obj.value = eval(value);
+          obj.value = _vm2.default.runInNewContext(value);
         } catch (err) {
           obj.value = '';
         }
@@ -89,7 +86,7 @@ function getMockData(field, index) {
       if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
           //todo 替换eval方法
-          let v = eval(value);
+          let v = _vm2.default.runInNewContext(value);
           if (v instanceof Array) {
             obj.value = v;
           }
@@ -159,10 +156,10 @@ function getMockData(field, index) {
       obj.value = parseFloat(defaultValue) || 0;
       //是否有示例值
     } else if (value) {
-      if (/^Mock.+\([^;]+\);?$/.test(value)) {
+      if (/^Mock.+\([^;]*\);?$/.test(value)) {
         try {
           //todo 替换eval方法
-          let v = eval(value);
+          let v = _vm2.default.runInNewContext(value);
           if (typeof v === 'number') {
             obj.value = v;
           }
@@ -195,7 +192,7 @@ function getMockData(field, index) {
       if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
           //todo 替换eval方法
-          let v = eval(value);
+          let v = _vm2.default.runInNewContext(value);
           if (v instanceof Array) {
             obj.value = v;
           } else {
@@ -236,9 +233,9 @@ function getMockData(field, index) {
     if (defaultValue && defaultValue === 'false') {
       obj.value = false;
     } else if (value) {
-      if (/^Mock.+\([^;]+\);?$/.test(value)) {
+      if (/^Mock.+\([^;]*\);?$/.test(value)) {
         try {
-          let v = eval(value);
+          let v = _vm2.default.runInNewContext(value);
           obj.value = v;
         } catch (err) {
           obj.value = false;
@@ -260,7 +257,7 @@ function getMockData(field, index) {
       if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
           //todo 替换eval方法
-          let v = eval(value);
+          let v = _vm2.default.runInNewContext(value);
           if (v instanceof Array) {
             obj.value = v;
           } else {
@@ -297,9 +294,9 @@ function getMockData(field, index) {
     if (defaultValue) {
       obj.value = defaultValue;
     } else if (value) {
-      if (/^Mock.+\([^;]+\);?$/.test(value)) {
+      if (/^Mock.+\([^;]*\);?$/.test(value)) {
         try {
-          let v = eval(value);
+          let v = _vm2.default.runInNewContext(value);
           obj.value = v;
         } catch (err) {
           obj.value = 1;
@@ -328,7 +325,7 @@ function getMockData(field, index) {
       if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
           //todo 替换eval方法
-          obj.value = eval(value);
+          obj.value = _vm2.default.runInNewContext(value);
         } catch (err) {
           obj.value = 0;
         }
@@ -356,4 +353,9 @@ function getMockData(field, index) {
     obj.value = null;
   }
   return obj.value;
-}
+} /**
+   * 脉冲软件
+   * http://maichong.it
+   * @Created by Rong on 2017/11/25.
+   * @author Rong <chaorong@maichong.it>
+   */
