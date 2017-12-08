@@ -20,12 +20,14 @@ export default class ApiSearch extends React.Component<Props> {
           onChange ?
             <input
               type="text"
+              name="search"
               className="form-control input-search"
               placeholder="快速检索"
               onChange={(e) => onChange(e.target.value)}
             /> :
             <input
               type="text"
+              name="search"
               className="form-control input-search"
               placeholder="快速检索"
             />

@@ -76,7 +76,7 @@ export default class ApiMenu extends React.Component<Props, State> {
     }
     // console.error('activeGroup:', activeGroup);
     this.setState({ activeGroup });
-    if(!this.props.isDownload) setLocalStorage('api-menu-active-group', activeGroup);
+    if (!this.props.isDownload) setLocalStorage('api-menu-active-group', activeGroup);
   };
   //获取路由
   getUrl = (type: string, id?: string) => {

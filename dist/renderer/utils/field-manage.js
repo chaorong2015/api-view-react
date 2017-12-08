@@ -237,7 +237,8 @@ function getFieldsOfModel(model, relationData, i) {
         //引用类型&
         if (simpleModel.fieldType === 'ref') {
           let disableFields = f.options && f.options.disabledFields ? f.options.disabledFields : [];
-          if (disableFields) {
+          //引用类型&user只显示一层，内部引用不显示
+          if (disableFields && !i) {
             //获取字段type中模型的字段
             let simpleModelFields = getFieldsOfModel(modelOfField, relationData, i + 1);
             if (simpleModelFields && simpleModelFields.length) {
@@ -245,8 +246,12 @@ function getFieldsOfModel(model, relationData, i) {
                 //判断引用所显示的字段
                 if (disableFields.indexOf(sf.title) < 0) {
                   let temp = getSimpleModelByFieldType(sf.type || '');
-                  //非scope类型
-                  results.push(Object.assign({}, sf, temp));
+                  //{ ref: f.ref } 引用的ref字段的ref应该为引用他的字段的ref 如route:body
+                  if (f && f.ref) {
+                    results.push(Object.assign({}, sf, temp, { ref: f.ref }));
+                  } else {
+                    results.push(Object.assign({}, sf, temp));
+                  }
                 }
               });
             }

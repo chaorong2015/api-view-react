@@ -65,7 +65,7 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
 
   getCaseValueEle = (f: Object): Object|null => {
     let ele = null;
-    let fieldValue = getMockData(f);
+    let fieldValue: Array<any> = getMockData(f);
     if (_.isArray(fieldValue)) {
       ele =
         <span>

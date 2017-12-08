@@ -35,7 +35,7 @@ export default class FieldDisplay extends React.Component<Props> {
   render() {
     let { className, value } = this.props;
     // console.log('======value:', value);
-    if(!value || !value.length) return <div />;
+    if (!value || !value.length) return <div />;
     return (
       <div className={className ? className + ' field-display' : 'field-display'}>
         <div className="list">
