@@ -13,11 +13,27 @@ var _mockjs = require('mockjs');
 
 var _mockjs2 = _interopRequireDefault(_mockjs);
 
-var _vm = require('vm');
-
-var _vm2 = _interopRequireDefault(_vm);
+var _vm = require('vm2');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const nodeVm = new _vm.NodeVM({
+  console: 'inherit',
+  sandbox: {},
+  require: {
+    external: true
+  }
+}); /**
+     * 脉冲软件
+     * http://maichong.it
+     * @Created by Rong on 2017/11/25.
+     * @author Rong <chaorong@maichong.it>
+     */
+
+function sandBox(fn) {
+  let functionInSandbox = nodeVm.run('var Mock = require("mockjs");' + `module.exports = function() { return ${fn} }`, 'vm.js');
+  return functionInSandbox();
+}
 
 function getMockData(field, index) {
   if (!index) index = 0;
@@ -31,10 +47,11 @@ function getMockData(field, index) {
     //判断是否有示例值
     if (!obj.value) {
       if (/^Mock.+\([^;]*\);?$/.test(value)) {
+        // console.log('=====value', value);
         try {
-          //todo 替换eval方法
-          obj.value = _vm2.default.runInNewContext(value);
+          obj.value = sandBox(value);
         } catch (err) {
+          console.error('sandBox Error', err.message || err);
           obj.value = '';
         }
       } else {
@@ -85,8 +102,7 @@ function getMockData(field, index) {
     if (!obj.value) {
       if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
-          //todo 替换eval方法
-          let v = _vm2.default.runInNewContext(value);
+          let v = sandBox(value);
           if (v instanceof Array) {
             obj.value = v;
           }
@@ -158,8 +174,7 @@ function getMockData(field, index) {
     } else if (value) {
       if (/^Mock.+\([^;]*\);?$/.test(value)) {
         try {
-          //todo 替换eval方法
-          let v = _vm2.default.runInNewContext(value);
+          let v = sandBox(value);
           if (typeof v === 'number') {
             obj.value = v;
           }
@@ -191,8 +206,7 @@ function getMockData(field, index) {
     } else if (value) {
       if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
-          //todo 替换eval方法
-          let v = _vm2.default.runInNewContext(value);
+          let v = sandBox(value);
           if (v instanceof Array) {
             obj.value = v;
           } else {
@@ -235,7 +249,7 @@ function getMockData(field, index) {
     } else if (value) {
       if (/^Mock.+\([^;]*\);?$/.test(value)) {
         try {
-          let v = _vm2.default.runInNewContext(value);
+          let v = sandBox(value);
           obj.value = v;
         } catch (err) {
           obj.value = false;
@@ -256,8 +270,7 @@ function getMockData(field, index) {
     } else if (value) {
       if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
-          //todo 替换eval方法
-          let v = _vm2.default.runInNewContext(value);
+          let v = sandBox(value);
           if (v instanceof Array) {
             obj.value = v;
           } else {
@@ -296,7 +309,7 @@ function getMockData(field, index) {
     } else if (value) {
       if (/^Mock.+\([^;]*\);?$/.test(value)) {
         try {
-          let v = _vm2.default.runInNewContext(value);
+          let v = sandBox(value);
           obj.value = v;
         } catch (err) {
           obj.value = 1;
@@ -324,8 +337,7 @@ function getMockData(field, index) {
     } else if (value) {
       if (/^\[?Mock.+\([^;]*\)\]?;?$/.test(value)) {
         try {
-          //todo 替换eval方法
-          obj.value = _vm2.default.runInNewContext(value);
+          obj.value = sandBox(value);
         } catch (err) {
           obj.value = 0;
         }
@@ -353,9 +365,4 @@ function getMockData(field, index) {
     obj.value = null;
   }
   return obj.value;
-} /**
-   * 脉冲软件
-   * http://maichong.it
-   * @Created by Rong on 2017/11/25.
-   * @author Rong <chaorong@maichong.it>
-   */
+}
