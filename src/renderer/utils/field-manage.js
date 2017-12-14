@@ -346,8 +346,8 @@ export function getFieldsOfBody(route: Object, relationData:Object):Object|null 
 export function getFieldsOfResponse(route: Object, relationData:Object):Array<Object> {
   let responses = [];
   _.map(relationData.responses, (response) => {
-    if (route.id === response.route) {
-      if (!response.type) return;
+    if (route.id && response.route && route.id.toString() === response.route.toString()) {
+      if (!response.type) return responses;
       if (response.type !== '{}') {
         let simpleModel = getSimpleModelByFieldType(response.type);
         if (!simpleModel.modelTitle) return;

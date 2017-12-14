@@ -356,8 +356,8 @@ function getFieldsOfBody(route, relationData) {
 function getFieldsOfResponse(route, relationData) {
   let responses = [];
   _lodash2.default.map(relationData.responses, response => {
-    if (route.id === response.route) {
-      if (!response.type) return;
+    if (route.id && response.route && route.id.toString() === response.route.toString()) {
+      if (!response.type) return responses;
       if (response.type !== '{}') {
         let simpleModel = getSimpleModelByFieldType(response.type);
         if (!simpleModel.modelTitle) return;
