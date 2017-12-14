@@ -60,7 +60,7 @@ export default class MenuItems extends React.Component<Props, State> {
     let { type, value, mode } = props;
     let itemType = type === 'group' ? 'route' : type;
     return (
-      <div className="menu-panel">
+      <div className="menu-group">
         <div className="display-flex" onClick={() => this.openSub(value.id)}>
           {
             mode !== 'view' ?

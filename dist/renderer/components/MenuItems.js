@@ -85,7 +85,7 @@ var _initialiseProps = function () {
     let itemType = type === 'group' ? 'route' : type;
     return _react2.default.createElement(
       'div',
-      { className: 'menu-panel' },
+      { className: 'menu-group' },
       _react2.default.createElement(
         'div',
         { className: 'display-flex', onClick: () => this.openSub(value.id) },
