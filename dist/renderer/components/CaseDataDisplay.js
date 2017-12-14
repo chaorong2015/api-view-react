@@ -21,116 +21,29 @@ class CaseDataDisplay extends _react2.default.Component {
   constructor(props) {
     super(props);
 
-    this.toggleField = f => {
-      let data = {};
-      data[f.id] = !this.state[f.id];
-      this.setState(data);
-    };
-
-    this.getLeftMark = type => {
-      if (type === 'object' || type === 'scope') return '{';
-      if (type === 'tuple') return '[';
-      if (type === 'array') return '[';
-      return '';
-    };
-
-    this.getRightMark = type => {
-      if (type === 'object' || type === 'scope') return '}';
-      if (type === 'tuple') return ']';
-      if (type === 'array') return ']';
-      return '';
-    };
-
-    this.getCaseValueEle = f => {
-      let ele = null;
-      let fieldValue = (0, _fieldMock.getMockData)(f);
-      if (_lodash2.default.isArray(fieldValue)) {
-        ele = _react2.default.createElement(
-          'span',
-          null,
-          '[ \xA0',
-          _lodash2.default.map(fieldValue || [], (v, index) => {
-            if (_lodash2.default.isObject(fieldValue)) {
-              return _react2.default.createElement(
-                'span',
-                { key: index },
-                _react2.default.createElement(
-                  'span',
-                  { className: f.modelType },
-                  JSON.stringify(v)
-                ),
-                index < fieldValue.length - 1 ? _react2.default.createElement(
-                  'span',
-                  null,
-                  ',\xA0'
-                ) : ''
-              );
-            }
-            return _react2.default.createElement(
-              'span',
-              { key: index },
-              _react2.default.createElement(
-                'span',
-                { className: f.modelType },
-                v.toString()
-              ),
-              index < fieldValue.length - 1 ? _react2.default.createElement(
-                'span',
-                null,
-                ',\xA0'
-              ) : ''
-            );
-          }),
-          '\xA0 ]'
-        );
-      } else if (_lodash2.default.isBoolean(fieldValue)) {
-        ele = _react2.default.createElement(
-          'span',
-          { className: f.fieldType },
-          fieldValue.toString()
-        );
-      } else if (_lodash2.default.isNull(fieldValue)) {
-        ele = _react2.default.createElement(
-          'span',
-          { className: 'null' },
-          'null'
-        );
-      } else if (_lodash2.default.isObject(fieldValue)) {
-        if (_lodash2.default.isEmpty(fieldValue)) {
-          ele = _react2.default.createElement(
-            'span',
-            { className: f.fieldType },
-            '{\xA0\xA0}'
-          );
-        } else {
-          ele = _react2.default.createElement(
-            'span',
-            { className: f.fieldType },
-            JSON.stringify(fieldValue)
-          );
-        }
-      } else {
-        ele = _react2.default.createElement(
-          'span',
-          { className: f.fieldType },
-          fieldValue ? fieldValue.toString() : ''
-        );
-      }
-      return ele;
-    };
+    _initialiseProps.call(this);
 
     this.state = {
       objectType: ['object', 'scope', 'array', 'tuple', 'model'],
-      activeObj: []
+      activeObj: [],
+      value: this.initValue(props)
       // open: false
     };
   }
 
+  componentWillReceiveProps(props) {
+    if (props && this.props && !_lodash2.default.isEqual(this.props.value, props.value)) {
+      // console.log('=======this.props.value', this.props.value);
+      // console.log('=======props.value', props.value);
+      this.setState({ value: this.initValue(props) });
+    }
+  }
+
   render() {
     let {
-      className, value, type, wrapType, next
+      className, type, wrapType, next
     } = this.props;
-    let { objectType } = this.state;
+    let { objectType, value } = this.state;
     return _react2.default.createElement(
       'div',
       { className: className ? className + ' case-data-display' : 'case-data-display' },
@@ -149,7 +62,7 @@ class CaseDataDisplay extends _react2.default.Component {
         _react2.default.createElement(
           'div',
           { className: 'obj' },
-          _lodash2.default.map(value, (f, index) => {
+          _lodash2.default.map(value, (f, i) => {
             if (f.children && f.children.fields && f.children.fields.length) {
               return _react2.default.createElement(
                 'div',
@@ -181,7 +94,7 @@ class CaseDataDisplay extends _react2.default.Component {
                       value: f.children.fields,
                       wrapType: f.fieldType,
                       type: f.modelType,
-                      next: index < value.length - 1
+                      next: parseInt(i) < value.length - 1
                     }) : _react2.default.createElement(
                       'span',
                       null,
@@ -196,7 +109,7 @@ class CaseDataDisplay extends _react2.default.Component {
                     '...',
                     this.getRightMark(f.modelType),
                     this.getRightMark(f.fieldType),
-                    index < value.length - 1 ? _react2.default.createElement(
+                    parseInt(i) < value.length - 1 ? _react2.default.createElement(
                       'span',
                       { className: 'split' },
                       ','
@@ -221,9 +134,9 @@ class CaseDataDisplay extends _react2.default.Component {
               _react2.default.createElement(
                 'span',
                 { className: 'value' },
-                this.getCaseValueEle(f) || f.mock || f.default || f.fieldType + '类型'
+                f.caseValueEle
               ),
-              index < value.length - 1 ? _react2.default.createElement(
+              parseInt(i) < value.length - 1 ? _react2.default.createElement(
                 'span',
                 { className: 'split' },
                 ','
@@ -254,4 +167,116 @@ CaseDataDisplay.defaultProps = {
   wrapType: '',
   index: 1,
   next: false
+};
+
+var _initialiseProps = function () {
+  this.initValue = props => {
+    let { value } = props;
+    return _lodash2.default.map(value, f => {
+      if (f.children && f.children.fields && f.children.fields.length) {
+        return f;
+      }
+      return Object.assign({}, f, {
+        caseValueEle: this.getCaseValueEle(f) || f.mock || f.default || f.fieldType + '类型'
+      });
+    });
+  };
+
+  this.toggleField = f => {
+    let data = {};
+    data[f.id] = !this.state[f.id];
+    this.setState(data);
+  };
+
+  this.getLeftMark = type => {
+    if (type === 'object' || type === 'scope') return '{';
+    if (type === 'tuple') return '[';
+    if (type === 'array') return '[';
+    return '';
+  };
+
+  this.getRightMark = type => {
+    if (type === 'object' || type === 'scope') return '}';
+    if (type === 'tuple') return ']';
+    if (type === 'array') return ']';
+    return '';
+  };
+
+  this.getCaseValueEle = f => {
+    let ele = null;
+    let fieldValue = (0, _fieldMock.getMockData)(f);
+    if (_lodash2.default.isArray(fieldValue)) {
+      ele = _react2.default.createElement(
+        'span',
+        null,
+        '[ \xA0',
+        _lodash2.default.map(fieldValue || [], (v, index) => {
+          if (_lodash2.default.isObject(fieldValue)) {
+            return _react2.default.createElement(
+              'span',
+              { key: index },
+              _react2.default.createElement(
+                'span',
+                { className: f.modelType },
+                JSON.stringify(v)
+              ),
+              index < fieldValue.length - 1 ? _react2.default.createElement(
+                'span',
+                null,
+                ',\xA0'
+              ) : ''
+            );
+          }
+          return _react2.default.createElement(
+            'span',
+            { key: index },
+            _react2.default.createElement(
+              'span',
+              { className: f.modelType },
+              v.toString()
+            ),
+            index < fieldValue.length - 1 ? _react2.default.createElement(
+              'span',
+              null,
+              ',\xA0'
+            ) : ''
+          );
+        }),
+        '\xA0 ]'
+      );
+    } else if (_lodash2.default.isBoolean(fieldValue)) {
+      ele = _react2.default.createElement(
+        'span',
+        { className: f.fieldType },
+        fieldValue.toString()
+      );
+    } else if (_lodash2.default.isNull(fieldValue)) {
+      ele = _react2.default.createElement(
+        'span',
+        { className: 'null' },
+        'null'
+      );
+    } else if (_lodash2.default.isObject(fieldValue)) {
+      if (_lodash2.default.isEmpty(fieldValue)) {
+        ele = _react2.default.createElement(
+          'span',
+          { className: f.fieldType },
+          '{\xA0\xA0}'
+        );
+      } else {
+        ele = _react2.default.createElement(
+          'span',
+          { className: f.fieldType },
+          JSON.stringify(fieldValue)
+        );
+      }
+    } else {
+      ele = _react2.default.createElement(
+        'span',
+        { className: f.fieldType },
+        fieldValue ? fieldValue.toString() : ''
+      );
+    }
+    return ele;
+  };
 };

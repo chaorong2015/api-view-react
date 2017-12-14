@@ -36,7 +36,7 @@ class Index extends _react2.default.Component {
         baseUrl: this.props.menuBaseUrl,
         value: this.props.value
       }),
-      _react2.default.createElement(_ApiInfoWrapper2.default, { baseUrl: this.props.menuBaseUrl, className: 'scrollbar-v-xs', value: value })
+      _react2.default.createElement(_ApiInfoWrapper2.default, { baseUrl: this.props.menuBaseUrl, value: value })
     );
   }
 }

@@ -25,7 +25,7 @@ function sandBox(fn) {
   return functionInSandbox();
 }
 
-export function getMockData(field:Object, index?:number|null):any {
+export function getMockData(field: Object, index?: number|null): any {
   if (!index) index = 0;
   if (index > 2) return null; //防止死循环
   let obj = {};
@@ -171,6 +171,9 @@ export function getMockData(field:Object, index?:number|null):any {
         } catch (err) {
           obj.value = 0;
         }
+      } else {
+        let v = parseFloat(value);
+        obj.value = v || 0;
       }
       //是否有最小值最大值
     } else {
@@ -238,7 +241,7 @@ export function getMockData(field:Object, index?:number|null):any {
     }
   } else if (field.type === 'boolean') {
     obj.value = true;
-    if (defaultValue && defaultValue === 'false') {
+    if (defaultValue && (defaultValue === 'false' || defaultValue === '0')) {
       obj.value = false;
     } else if (value) {
       if (/^Mock.+\([^;]*\);?$/.test(value)) {
@@ -248,6 +251,9 @@ export function getMockData(field:Object, index?:number|null):any {
         } catch (err) {
           obj.value = false;
         }
+      } else {
+        let v = value !== 'false' && value !== '0';
+        obj.value = v;
       }
     }
   } else if (field.type === 'boolean[]') {
@@ -256,7 +262,7 @@ export function getMockData(field:Object, index?:number|null):any {
       try {
         let v = JSON.parse(defaultValue);
         if (v instanceof Array) {
-          obj.value = v;
+          obj.value = _.map(v, (i) => !!i);
         }
       } catch (err) {
         obj.value = [false];
@@ -266,7 +272,7 @@ export function getMockData(field:Object, index?:number|null):any {
         try {
           let v = sandBox(value);
           if (v instanceof Array) {
-            obj.value = v;
+            obj.value = _.map(v, (i) => !!i);
           } else {
             obj.value = [false];
           }
@@ -277,7 +283,7 @@ export function getMockData(field:Object, index?:number|null):any {
         try {
           let v = JSON.parse(value);
           if (v instanceof Array) {
-            obj.value = v;
+            obj.value = _.map(v, (i) => !!i);
           } else {
             obj.value = [false];
           }

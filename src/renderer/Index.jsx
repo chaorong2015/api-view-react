@@ -61,7 +61,7 @@ export default class Index extends React.Component<Props> {
           baseUrl={this.props.menuBaseUrl}
           value={this.props.value}
         />
-        <ApiInfoWrapper baseUrl={this.props.menuBaseUrl} className="scrollbar-v-xs" value={value} />
+        <ApiInfoWrapper baseUrl={this.props.menuBaseUrl} value={value} />
       </div>
     );
   }

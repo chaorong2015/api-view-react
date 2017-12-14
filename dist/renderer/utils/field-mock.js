@@ -181,6 +181,9 @@ function getMockData(field, index) {
         } catch (err) {
           obj.value = 0;
         }
+      } else {
+        let v = parseFloat(value);
+        obj.value = v || 0;
       }
       //是否有最小值最大值
     } else {
@@ -244,7 +247,7 @@ function getMockData(field, index) {
     }
   } else if (field.type === 'boolean') {
     obj.value = true;
-    if (defaultValue && defaultValue === 'false') {
+    if (defaultValue && (defaultValue === 'false' || defaultValue === '0')) {
       obj.value = false;
     } else if (value) {
       if (/^Mock.+\([^;]*\);?$/.test(value)) {
@@ -254,6 +257,9 @@ function getMockData(field, index) {
         } catch (err) {
           obj.value = false;
         }
+      } else {
+        let v = value !== 'false' && value !== '0';
+        obj.value = v;
       }
     }
   } else if (field.type === 'boolean[]') {
@@ -262,7 +268,7 @@ function getMockData(field, index) {
       try {
         let v = JSON.parse(defaultValue);
         if (v instanceof Array) {
-          obj.value = v;
+          obj.value = _lodash2.default.map(v, i => !!i);
         }
       } catch (err) {
         obj.value = [false];
@@ -272,7 +278,7 @@ function getMockData(field, index) {
         try {
           let v = sandBox(value);
           if (v instanceof Array) {
-            obj.value = v;
+            obj.value = _lodash2.default.map(v, i => !!i);
           } else {
             obj.value = [false];
           }
@@ -283,7 +289,7 @@ function getMockData(field, index) {
         try {
           let v = JSON.parse(value);
           if (v instanceof Array) {
-            obj.value = v;
+            obj.value = _lodash2.default.map(v, i => !!i);
           } else {
             obj.value = [false];
           }

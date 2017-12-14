@@ -23,7 +23,8 @@ type Props = {
 };
 type State = {
   activeObj: Array<string>,
-  objectType: Array<string>
+  objectType: Array<string>,
+  value: Array<Object>
 };
 
 export default class CaseDataDisplay extends React.Component<Props, State> {
@@ -38,10 +39,35 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
     super(props);
     this.state = {
       objectType: ['object', 'scope', 'array', 'tuple', 'model'],
-      activeObj: []
+      activeObj: [],
+      value: this.initValue(props)
       // open: false
     };
   }
+
+  componentWillReceiveProps(props: Props) {
+    if (props && this.props && !_.isEqual(this.props.value, props.value)) {
+      // console.log('=======this.props.value', this.props.value);
+      // console.log('=======props.value', props.value);
+      this.setState({ value: this.initValue(props) });
+    }
+  }
+
+  initValue = (props: Props):Array<Object> => {
+    let { value } = props;
+    return _.map(value, (f) => {
+      if (f.children && f.children.fields && f.children.fields.length) {
+        return f;
+      }
+      return Object.assign(
+        {},
+        f,
+        {
+          caseValueEle: this.getCaseValueEle(f) || f.mock || f.default || f.fieldType + '类型'
+        }
+      );
+    });
+  };
 
   toggleField = (f: Object) => {
     let data = {};
@@ -110,9 +136,9 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
 
   render() {
     let {
-      className, value, type, wrapType, next
+      className, type, wrapType, next
     } = this.props;
-    let { objectType } = this.state;
+    let { objectType, value } = this.state;
     return (
       <div className={className ? className + ' case-data-display' : 'case-data-display'}>
         {this.getLeftMark(wrapType)}
@@ -125,7 +151,7 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
             <div className="json-panel">
               <div className="obj">
                 {
-                  _.map(value, (f, index) => {
+                  _.map(value, (f, i) => {
                     if (f.children && f.children.fields && f.children.fields.length) {
                       return (
                         <div key={f.id} className="field-children">
@@ -154,7 +180,7 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
                                     value={f.children.fields}
                                     wrapType={f.fieldType}
                                     type={f.modelType}
-                                    next={index < value.length - 1}
+                                    next={parseInt(i) < value.length - 1}
                                   /> : <span>{'<' + f.type + '>'}</span>
                               }
                             </div>
@@ -165,7 +191,7 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
                               {this.getRightMark(f.modelType)}
                               {this.getRightMark(f.fieldType)}
                               {
-                                index < value.length - 1 ? <span className="split">,</span> : null
+                                parseInt(i) < value.length - 1 ? <span className="split">,</span> : null
                               }
                             </div>
                           </div>
@@ -181,10 +207,10 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
                           </span> : null
                         }
                         <span className="value">
-                          {this.getCaseValueEle(f) || f.mock || f.default || f.fieldType + '类型'}
+                          {f.caseValueEle}
                         </span>
                         {
-                          index < value.length - 1 ? <span className="split">,</span> : null
+                          parseInt(i) < value.length - 1 ? <span className="split">,</span> : null
                         }
                       </div>);
                   })
