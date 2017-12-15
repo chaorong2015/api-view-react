@@ -9,6 +9,30 @@
 
 import _ from 'lodash';
 
+let fieldMaps = {};
+/* 根据refId归类Field的Map图
+ * fields 所有的字段数组
+ * 返回数据 Field的Map图
+ * */
+export function setFieldMaps(fields: Array<Object>): Object {
+  if (!fields) {
+    throw new Error('fields is required in getFieldMapsByRefId');
+  }
+  let map = {};
+  _.map(fields, (f) => {
+    if (f.refId) {
+      if (!map[f.refId]) map[f.refId] = [];
+      map[f.refId].push(f);
+    }
+  });
+  fieldMaps = map;
+  return fieldMaps;
+}
+/**返回数据 Field的Map图
+* */
+export function getFieldMaps(): Object {
+  return fieldMaps;
+}
 /* 根据对象名获取Model
  * title model的title，例如 User$Base
  * type model的类型，例如 scope
@@ -75,7 +99,7 @@ function getModelByTitle(title: string, type:string, params: Object, relationDat
  hasFields: true //是否有字段数组
  };
  * */
-function getSimpleModelByFieldType(fieldType: string): Object {
+export function getSimpleModelByFieldType(fieldType: string): Object {
   if (!fieldType) return {};
   if (typeof fieldType !== 'string') {
     throw new Error('param is string in getSimpleModelByFieldType');
@@ -127,26 +151,13 @@ function getSimpleModelByFieldType(fieldType: string): Object {
     model.hasFields = true;
     return model;
   }
+  if (fieldType === '{}') {
+    model.fieldType = 'object';
+    model.hasFields = true;
+    return model;
+  }
   model.fieldType = fieldType;
   return model;
-}
-
-/* 根据refId归类Field的Map图
- * fields 所有的字段数组
- * 返回数据 Field的Map图
- * */
-function getFiledMapsByRefId(fields: Array<Object>): Object {
-  if (!fields) {
-    throw new Error('fields is required in getFiledMapsByRefId');
-  }
-  let map = {};
-  _.map(fields, (f) => {
-    if (f.refId) {
-      if (!map[f.refId]) map[f.refId] = [];
-      map[f.refId].push(f);
-    }
-  });
-  return map;
 }
 
 /* 获取字段类型中的模型，处理包含getSimpleModelByFieldType里的字段，好包含model在数据库里的数据
@@ -183,8 +194,6 @@ export function getFieldsOfModel(model:Object, relationData:Object, i?:number|nu
   if (!i) i = 0;
   let results = [];
   if (i > 3) return results; //循环只能为2次
-  //获取字段的map图
-  let fieldMaps = getFiledMapsByRefId(relationData.fields);
   let modelType = '';
   //判断模型类型
   let s = getSimpleModelByFieldType(model.title);
@@ -347,7 +356,7 @@ export function getFieldsOfResponse(route: Object, relationData:Object):Array<Ob
   let responses = [];
   _.map(relationData.responses, (response) => {
     if (route.id && response.route && route.id.toString() === response.route.toString()) {
-      if (!response.type) return responses;
+      if (!response.type) return;
       if (response.type !== '{}') {
         let simpleModel = getSimpleModelByFieldType(response.type);
         if (!simpleModel.modelTitle) return;

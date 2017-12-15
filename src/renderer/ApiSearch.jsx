@@ -14,6 +14,7 @@ type Props = {
 export default class ApiSearch extends React.Component<Props> {
   render() {
     let { onChange } = this.props;
+    // console.log('======ApiSearch');
     return (
       <div className="api-search">
         {

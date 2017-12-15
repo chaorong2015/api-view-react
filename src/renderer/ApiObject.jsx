@@ -46,6 +46,7 @@ export default class ApiObject extends React.Component<Props> {
     }
     let fields = getFieldsOfModel(value, relation);
     let scopes = this.getScopes();
+    // console.log('======ApiObject');
     return (
       <div className={className} id={'object-' + value.id}>
         <div className="panel-left">
@@ -54,7 +55,7 @@ export default class ApiObject extends React.Component<Props> {
             fields && fields.length ?
               <div className="object">
                 <div className="padding-sm-v">属性</div>
-                <FieldDisplay baseUrl={this.props.baseUrl} value={fields} />
+                <FieldDisplay type={value.title} showType={false} baseUrl={this.props.baseUrl} value={fields} />
               </div> : null
           }
           {

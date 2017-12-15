@@ -13,6 +13,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 class ApiSearch extends _react2.default.Component {
   render() {
     let { onChange } = this.props;
+    // console.log('======ApiSearch');
     return _react2.default.createElement(
       "div",
       { className: "api-search" },

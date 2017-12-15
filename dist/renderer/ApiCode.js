@@ -23,6 +23,7 @@ class ApiCode extends _react2.default.Component {
     if (this.props.className) {
       className = className + ' ' + this.props.className;
     }
+    // console.log('======ApiCode');
     return _react2.default.createElement(
       'div',
       { className: className, id: 'code' },

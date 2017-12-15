@@ -19,6 +19,7 @@ class RouteMethodDisplay extends _react2.default.Component {
       className = className + ' ' + this.props.className;
     }
     if (!method) return _react2.default.createElement('div', null);
+    // console.log('======RouteMethodDisplay');
     return _react2.default.createElement(
       'div',
       { className: className },

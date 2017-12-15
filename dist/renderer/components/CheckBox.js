@@ -44,10 +44,10 @@ class CheckBox extends _react2.default.Component {
       }
     } else if (checked) {
       icon = 'check-square';
-    } else {
-      //icon = 'square-o';
-    }
+    } else {}
+    //icon = 'square-o';
 
+    // console.log('======CheckBox');
     return _react2.default.createElement(
       'label',
       { className: className, onClick: disabled ? null : this.handleCheck },

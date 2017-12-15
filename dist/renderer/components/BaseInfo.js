@@ -23,6 +23,7 @@ class BaseInfo extends _react2.default.Component {
     if (this.props.isSub) {
       className += ' sub-info';
     }
+    // console.log('======BaseInfo');
     return _react2.default.createElement(
       'div',
       { className: className },

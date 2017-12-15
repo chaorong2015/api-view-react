@@ -9,10 +9,13 @@
 
 import React from 'react';
 import _ from 'lodash';
+import { getSimpleModelByFieldType } from '../utils/field-manage';
 
 type Props = {
   className?: string,
   baseUrl?: string,
+  type?: string,
+  showType?: boolean,
   value: Array<Object>
   // 数组中为Field对象，同时在对象中增加了{children:{...model, fields: []}},
   // model为Object、Tuple、Scope的字段
@@ -20,7 +23,10 @@ type Props = {
 
 export default class FieldDisplay extends React.Component<Props> {
   static defaultProps = {
-    className: ''
+    className: '',
+    baseUrl: '',
+    type: '',
+    showType: true
   };
 
   getTypeDisplay = (f: Object): Object => {
@@ -33,13 +39,29 @@ export default class FieldDisplay extends React.Component<Props> {
     return <span>{f.type}</span>;
   };
   render() {
-    let { className, value } = this.props;
+    let {
+      className, value, type, showType
+    } = this.props;
     // console.log('======value:', value);
     if (!value || !value.length) return <div />;
+    // console.log('======FieldDisplay');
+    let model = null;
+    let borderType = 'object';
+    //通过类型获取一个简单模型
+    if (type) {
+      model = getSimpleModelByFieldType(type);
+      if (model && (model.fieldType === 'array' || model.modelType === 'tuple')) {
+        borderType = 'array';
+      }
+    }
     return (
       <div className={className ? className + ' field-display' : 'field-display'}>
         <div className="list">
-          <div className="list-left-border" />
+          {
+            showType && model && model.modelTitle ?
+              <div className="field-type">{type}</div> : null
+          }
+          <div className={'list-left-border ' + borderType} />
           <div className="list-items">
             {
               _.map((value || []), (field) => (

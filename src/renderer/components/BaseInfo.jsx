@@ -37,6 +37,7 @@ export default class BaseInfo extends React.Component<Props> {
     if (this.props.isSub) {
       className += ' sub-info';
     }
+    // console.log('======BaseInfo');
     return (
       <div className={className}>
         <div className="title">

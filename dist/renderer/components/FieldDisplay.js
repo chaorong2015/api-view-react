@@ -12,14 +12,9 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _fieldManage = require('../utils/field-manage');
 
-/**
- * 脉冲软件
- * http://maichong.it
- * Created by Rong on 2017/11/17.
- * chaorong@maichong.it
- */
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class FieldDisplay extends _react2.default.Component {
   constructor(...args) {
@@ -45,16 +40,33 @@ class FieldDisplay extends _react2.default.Component {
   }
 
   render() {
-    let { className, value } = this.props;
+    let {
+      className, value, type, showType
+    } = this.props;
     // console.log('======value:', value);
     if (!value || !value.length) return _react2.default.createElement('div', null);
+    // console.log('======FieldDisplay');
+    let model = null;
+    let borderType = 'object';
+    //通过类型获取一个简单模型
+    if (type) {
+      model = (0, _fieldManage.getSimpleModelByFieldType)(type);
+      if (model && (model.fieldType === 'array' || model.modelType === 'tuple')) {
+        borderType = 'array';
+      }
+    }
     return _react2.default.createElement(
       'div',
       { className: className ? className + ' field-display' : 'field-display' },
       _react2.default.createElement(
         'div',
         { className: 'list' },
-        _react2.default.createElement('div', { className: 'list-left-border' }),
+        showType && model && model.modelTitle ? _react2.default.createElement(
+          'div',
+          { className: 'field-type' },
+          type
+        ) : null,
+        _react2.default.createElement('div', { className: 'list-left-border ' + borderType }),
         _react2.default.createElement(
           'div',
           { className: 'list-items' },
@@ -129,7 +141,16 @@ class FieldDisplay extends _react2.default.Component {
     );
   }
 }
-exports.default = FieldDisplay;
+exports.default = FieldDisplay; /**
+                                 * 脉冲软件
+                                 * http://maichong.it
+                                 * Created by Rong on 2017/11/17.
+                                 * chaorong@maichong.it
+                                 */
+
 FieldDisplay.defaultProps = {
-  className: ''
+  className: '',
+  baseUrl: '',
+  type: '',
+  showType: true
 };

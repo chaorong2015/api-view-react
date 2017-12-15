@@ -30,6 +30,7 @@ export default class ModelCase extends React.Component<Props> {
       className, value, title, type
     } = this.props;
     if (!value || !value.length) return <div />;
+    // console.log('======ModelCase');
     return (
       <div className={className ? className + ' model-case' : 'model-case'}>
         <div className="model-case-title">{title}</div>

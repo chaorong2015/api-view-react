@@ -26,6 +26,7 @@ export default class ApiDesc extends React.Component<Props> {
     if (this.props.className) {
       className = className + ' ' + this.props.className;
     }
+    // console.log('======ApiDesc');
     return (
       <div className={className} id={'description-' + value.id}>
         <BaseInfo className="panel-left" title={value.title} desc={value.desc} />

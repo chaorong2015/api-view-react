@@ -118,6 +118,7 @@ class ApiRoute extends _react2.default.Component {
     let fieldsRouteBody = (0, _fieldManage.getFieldsOfBody)(value, relation);
     let responseArr = (0, _fieldManage.getFieldsOfResponse)(value, relation);
     responseArr = _lodash2.default.orderBy(responseArr, ['code'], ['asc']);
+    // console.log('======ApiRoute');
     return _react2.default.createElement(
       'div',
       { className: className, id: 'route-' + value.id },
@@ -179,22 +180,14 @@ class ApiRoute extends _react2.default.Component {
           fieldsRouteBody.desc ? _react2.default.createElement(
             'div',
             { className: 'desc padding-v-sm' },
-            '\u63CF\u8FF0:',
             fieldsRouteBody.desc
           ) : null,
-          fieldsRouteBody.modelTitle ? _react2.default.createElement(
-            'div',
-            { className: 'padding-v-sm' },
-            fieldsRouteBody.bodyType !== '{}' ? _react2.default.createElement(
-              'div',
-              { className: 'desc' },
-              '\u8BF7\u6C42\u6570\u636E\u4E3A',
-              fieldsRouteBody.bodyType,
-              fieldsRouteBody.fieldType === 'tuple' ? '[ ' + fieldsRouteBody.modelTitle + ' ]' : fieldsRouteBody.modelTitle,
-              '\u5C5E\u6027\u4FE1\u606F\u5982\u4E0B'
-            ) : null,
-            _react2.default.createElement(_FieldDisplay2.default, { baseUrl: this.props.baseUrl, className: 'flex', value: fieldsRouteBody.fields })
-          ) : _react2.default.createElement(_FieldDisplay2.default, { baseUrl: this.props.baseUrl, className: 'flex', value: fieldsRouteBody.fields })
+          _react2.default.createElement(_FieldDisplay2.default, {
+            type: value.bodyType,
+            baseUrl: this.props.baseUrl,
+            className: 'flex',
+            value: fieldsRouteBody.fields
+          })
         ) : null,
         responseArr && responseArr.length ? _react2.default.createElement(
           'div',
@@ -223,20 +216,7 @@ class ApiRoute extends _react2.default.Component {
                 r.desc
               )
             ),
-            r.modelTitle ? _react2.default.createElement(
-              'div',
-              { className: 'padding-v-sm' },
-              r.type !== '{}' ? _react2.default.createElement(
-                'div',
-                { className: 'desc' },
-                '\u8FD4\u56DE\u7ED3\u679C\u4E3A',
-                r.type,
-                ',',
-                r.fieldType === 'tuple' ? '[ ' + r.modelTitle + ' ]' : r.modelTitle,
-                '\u5C5E\u6027\u4FE1\u606F\u5982\u4E0B'
-              ) : null,
-              _react2.default.createElement(_FieldDisplay2.default, { baseUrl: this.props.baseUrl, className: 'flex', value: r.fields })
-            ) : _react2.default.createElement(_FieldDisplay2.default, { baseUrl: this.props.baseUrl, className: 'flex', value: r.fields })
+            _react2.default.createElement(_FieldDisplay2.default, { type: r.type, baseUrl: this.props.baseUrl, className: 'flex', value: r.fields })
           ))
         ) : null
       ),

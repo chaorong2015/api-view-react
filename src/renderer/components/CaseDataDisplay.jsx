@@ -22,7 +22,6 @@ type Props = {
   // model为Object、Tuple、Scope的字段
 };
 type State = {
-  activeObj: Array<string>,
   objectType: Array<string>,
   value: Array<Object>
 };
@@ -39,9 +38,7 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
     super(props);
     this.state = {
       objectType: ['object', 'scope', 'array', 'tuple', 'model'],
-      activeObj: [],
       value: this.initValue(props)
-      // open: false
     };
   }
 
@@ -52,6 +49,9 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
       this.setState({ value: this.initValue(props) });
     }
   }
+
+  refchildrenMap = {};
+  refIconMap = {};
 
   initValue = (props: Props):Array<Object> => {
     let { value } = props;
@@ -70,9 +70,18 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
   };
 
   toggleField = (f: Object) => {
-    let data = {};
-    data[f.id] = !this.state[f.id];
-    this.setState(data);
+    let refchildren = this.refchildrenMap[f.id];
+    let refIcon = this.refIconMap[f.id];
+    if (refchildren && refIcon) {
+      let className = refchildren.className;
+      if (className.indexOf('open') > -1) {
+        refchildren.className = 'field-children-value';
+        refIcon.className = 'icon icon-toggle-field toggle-hide';
+        return;
+      }
+      refchildren.className = 'field-children-value open';
+      refIcon.className = 'icon icon-toggle-field toggle-show';
+    }
   };
 
   getLeftMark = (type: string) => {
@@ -139,6 +148,7 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
       className, type, wrapType, next
     } = this.props;
     let { objectType, value } = this.state;
+    // console.log('======CaseDataDisplay');
     return (
       <div className={className ? className + ' case-data-display' : 'case-data-display'}>
         {this.getLeftMark(wrapType)}
@@ -156,9 +166,8 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
                       return (
                         <div key={f.id} className="field-children">
                           <div
-                            className={
-                              this.state[f.id] ? 'icon icon-toggle-field toggle-show'
-                                : 'icon icon-toggle-field toggle-hide'}
+                            ref={(ref) => { this.refIconMap[f.id] = ref; }}
+                            className="icon icon-toggle-field toggle-hide"
                             onClick={() => this.toggleField(f)}
                           />
                           { type === 'object' || f.title ?
@@ -168,9 +177,8 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
                             </div> : null
                           }
                           <div
-                            className={
-                            this.state[f.id] ? 'field-children-value open' : 'field-children-value'
-                            }
+                            ref={(ref) => { this.refchildrenMap[f.id] = ref; }}
+                            className="field-children-value"
                           >
                             <div className="property-show">
                               {

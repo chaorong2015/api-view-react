@@ -27,6 +27,7 @@ export default class RouteMethodDisplay extends React.Component<Props> {
       className = className + ' ' + this.props.className;
     }
     if (!method) return <div />;
+    // console.log('======RouteMethodDisplay');
     return (
       <div className={className}>
         <div className="method">{method}</div>

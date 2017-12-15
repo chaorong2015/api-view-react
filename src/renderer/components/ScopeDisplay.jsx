@@ -20,7 +20,7 @@ type Props = {
   }
 };
 
-export default class extends React.Component<Props> {
+export default class ScopeDisplay extends React.Component<Props> {
   static defaultProps = {
     className: ''
   };
@@ -29,6 +29,7 @@ export default class extends React.Component<Props> {
     let { value } = this.props;
     let className = this.props.className ?
       'object-scope-display ' + this.props.className : 'object-scope-display';
+    // console.log('======ScopeDisplay');
     return (
       <div className={className}>
         <div className="padding-v-sm">Scopes列表</div>
@@ -44,7 +45,7 @@ export default class extends React.Component<Props> {
                 </th>
                 {
                   value.scopes.map((scope) => (
-                    <th key={scope.id}>
+                    <th key={scope.id} id={'scope-' + scope.id}>
                       {scope.title}
                     </th>
                   ))

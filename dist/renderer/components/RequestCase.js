@@ -26,6 +26,7 @@ class RequestCase extends _react2.default.Component {
   render() {
     let { className, value, title } = this.props;
     if (!value || !value.fields || !value.fields.length) return _react2.default.createElement('div', null);
+    // console.log('======RequestCase');
     return _react2.default.createElement(
       'div',
       { className: className ? className + ' request-case' : 'request-case' },

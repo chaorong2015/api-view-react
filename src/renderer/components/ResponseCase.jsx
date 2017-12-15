@@ -44,6 +44,7 @@ export default class ResponseCase extends React.Component<Props, State> {
     let { response } = this.state;
     if (!value || !value.length) return <div />;
     // console.error('=======response', response);
+    // console.log('======ResponseCase');
     return (
       <div className={className ? className + ' response-case' : 'response-case'}>
         <div className="model-case-title">{title}</div>

@@ -56,7 +56,7 @@ export default class CheckBox extends React.Component<Props> {
     } else {
       //icon = 'square-o';
     }
-
+    // console.log('======CheckBox');
     return (
       <label className={className} onClick={disabled ? null : this.handleCheck}>
         <i className={'fa fa-' + icon} />

@@ -18,11 +18,12 @@ var _CheckBox2 = _interopRequireDefault(_CheckBox);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-class _class extends _react2.default.Component {
+class ScopeDisplay extends _react2.default.Component {
 
   render() {
     let { value } = this.props;
     let className = this.props.className ? 'object-scope-display ' + this.props.className : 'object-scope-display';
+    // console.log('======ScopeDisplay');
     return _react2.default.createElement(
       'div',
       { className: className },
@@ -51,7 +52,7 @@ class _class extends _react2.default.Component {
               ),
               value.scopes.map(scope => _react2.default.createElement(
                 'th',
-                { key: scope.id },
+                { key: scope.id, id: 'scope-' + scope.id },
                 scope.title
               ))
             )
@@ -92,13 +93,13 @@ class _class extends _react2.default.Component {
     );
   }
 }
-exports.default = _class; /**
-                           * 脉冲软件
-                           * http://maichong.it
-                           * Created by Rong on 2017/11/23.
-                           * chaorong@maichong.it
-                           */
+exports.default = ScopeDisplay; /**
+                                 * 脉冲软件
+                                 * http://maichong.it
+                                 * Created by Rong on 2017/11/23.
+                                 * chaorong@maichong.it
+                                 */
 
-_class.defaultProps = {
+ScopeDisplay.defaultProps = {
   className: ''
 };

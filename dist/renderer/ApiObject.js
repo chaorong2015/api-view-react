@@ -47,6 +47,7 @@ class ApiObject extends _react2.default.Component {
     }
     let fields = (0, _fieldManage.getFieldsOfModel)(value, relation);
     let scopes = this.getScopes();
+    // console.log('======ApiObject');
     return _react2.default.createElement(
       'div',
       { className: className, id: 'object-' + value.id },
@@ -62,7 +63,7 @@ class ApiObject extends _react2.default.Component {
             { className: 'padding-sm-v' },
             '\u5C5E\u6027'
           ),
-          _react2.default.createElement(_FieldDisplay2.default, { baseUrl: this.props.baseUrl, value: fields })
+          _react2.default.createElement(_FieldDisplay2.default, { type: value.title, showType: false, baseUrl: this.props.baseUrl, value: fields })
         ) : null,
         scopes && scopes.length ? _react2.default.createElement(_ScopeDisplay2.default, {
           value: Object.assign({}, value, { scopes, fields })

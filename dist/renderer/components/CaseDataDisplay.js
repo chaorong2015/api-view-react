@@ -25,9 +25,7 @@ class CaseDataDisplay extends _react2.default.Component {
 
     this.state = {
       objectType: ['object', 'scope', 'array', 'tuple', 'model'],
-      activeObj: [],
       value: this.initValue(props)
-      // open: false
     };
   }
 
@@ -44,6 +42,7 @@ class CaseDataDisplay extends _react2.default.Component {
       className, type, wrapType, next
     } = this.props;
     let { objectType, value } = this.state;
+    // console.log('======CaseDataDisplay');
     return _react2.default.createElement(
       'div',
       { className: className ? className + ' case-data-display' : 'case-data-display' },
@@ -68,7 +67,10 @@ class CaseDataDisplay extends _react2.default.Component {
                 'div',
                 { key: f.id, className: 'field-children' },
                 _react2.default.createElement('div', {
-                  className: this.state[f.id] ? 'icon icon-toggle-field toggle-show' : 'icon icon-toggle-field toggle-hide',
+                  ref: ref => {
+                    this.refIconMap[f.id] = ref;
+                  },
+                  className: 'icon icon-toggle-field toggle-hide',
                   onClick: () => this.toggleField(f)
                 }),
                 type === 'object' || f.title ? _react2.default.createElement(
@@ -84,7 +86,10 @@ class CaseDataDisplay extends _react2.default.Component {
                 _react2.default.createElement(
                   'div',
                   {
-                    className: this.state[f.id] ? 'field-children-value open' : 'field-children-value'
+                    ref: ref => {
+                      this.refchildrenMap[f.id] = ref;
+                    },
+                    className: 'field-children-value'
                   },
                   _react2.default.createElement(
                     'div',
@@ -170,6 +175,9 @@ CaseDataDisplay.defaultProps = {
 };
 
 var _initialiseProps = function () {
+  this.refchildrenMap = {};
+  this.refIconMap = {};
+
   this.initValue = props => {
     let { value } = props;
     return _lodash2.default.map(value, f => {
@@ -183,9 +191,18 @@ var _initialiseProps = function () {
   };
 
   this.toggleField = f => {
-    let data = {};
-    data[f.id] = !this.state[f.id];
-    this.setState(data);
+    let refchildren = this.refchildrenMap[f.id];
+    let refIcon = this.refIconMap[f.id];
+    if (refchildren && refIcon) {
+      let className = refchildren.className;
+      if (className.indexOf('open') > -1) {
+        refchildren.className = 'field-children-value';
+        refIcon.className = 'icon icon-toggle-field toggle-hide';
+        return;
+      }
+      refchildren.className = 'field-children-value open';
+      refIcon.className = 'icon icon-toggle-field toggle-show';
+    }
   };
 
   this.getLeftMark = type => {

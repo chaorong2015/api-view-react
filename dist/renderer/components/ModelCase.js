@@ -28,6 +28,7 @@ class ModelCase extends _react2.default.Component {
       className, value, title, type
     } = this.props;
     if (!value || !value.length) return _react2.default.createElement('div', null);
+    // console.log('======ModelCase');
     return _react2.default.createElement(
       'div',
       { className: className ? className + ' model-case' : 'model-case' },

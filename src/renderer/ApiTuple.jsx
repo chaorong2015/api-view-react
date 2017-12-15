@@ -38,6 +38,7 @@ export default class ApiTuple extends React.Component<Props> {
       className = className + ' ' + this.props.className;
     }
     let fields = getFieldsOfModel(value, relation);
+    // console.log('======ApiTuple');
     return (
       <div
         className={className}
@@ -54,7 +55,12 @@ export default class ApiTuple extends React.Component<Props> {
             fields && fields.length ?
               <div className="tuple">
                 <div className="padding-sm-v">属性</div>
-                <FieldDisplay baseUrl={this.props.baseUrl} value={fields} />
+                <FieldDisplay
+                  type={'[' + value.title + ']'}
+                  showType={false}
+                  baseUrl={this.props.baseUrl}
+                  value={fields}
+                />
               </div> : null
           }
         </div>

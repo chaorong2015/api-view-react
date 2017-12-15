@@ -32,6 +32,7 @@ class ResponseCase extends _react2.default.Component {
     let { response } = this.state;
     if (!value || !value.length) return _react2.default.createElement('div', null);
     // console.error('=======response', response);
+    // console.log('======ResponseCase');
     return _react2.default.createElement(
       'div',
       { className: className ? className + ' response-case' : 'response-case' },

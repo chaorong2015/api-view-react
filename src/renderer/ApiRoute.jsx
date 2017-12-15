@@ -91,6 +91,7 @@ export default class ApiRoute extends React.Component<Props> {
     let fieldsRouteBody = getFieldsOfBody(value, relation);
     let responseArr = getFieldsOfResponse(value, relation);
     responseArr = _.orderBy(responseArr, ['code'], ['asc']);
+    // console.log('======ApiRoute');
     return (
       <div className={className} id={'route-' + value.id}>
         <div className="panel-left">
@@ -121,25 +122,14 @@ export default class ApiRoute extends React.Component<Props> {
               <div className="padding-top">
                 <div className="title-left-border">Body参数</div>
                 {
-                  fieldsRouteBody.desc ? <div className="desc padding-v-sm">描述:{fieldsRouteBody.desc}</div> : null
+                  fieldsRouteBody.desc ? <div className="desc padding-v-sm">{fieldsRouteBody.desc}</div> : null
                 }
-                {
-                  fieldsRouteBody.modelTitle ?
-                    <div className="padding-v-sm">
-                      {
-                        fieldsRouteBody.bodyType !== '{}' ?
-                          <div className="desc">
-                            请求数据为{fieldsRouteBody.bodyType}
-                            {
-                              fieldsRouteBody.fieldType === 'tuple' ?
-                                '[ ' + fieldsRouteBody.modelTitle + ' ]' : fieldsRouteBody.modelTitle
-                            }属性信息如下
-                          </div> : null
-                      }
-                      <FieldDisplay baseUrl={this.props.baseUrl} className="flex" value={fieldsRouteBody.fields} />
-                    </div> :
-                    <FieldDisplay baseUrl={this.props.baseUrl} className="flex" value={fieldsRouteBody.fields} />
-                }
+                <FieldDisplay
+                  type={value.bodyType}
+                  baseUrl={this.props.baseUrl}
+                  className="flex"
+                  value={fieldsRouteBody.fields}
+                />
               </div> : null
           }
           {
@@ -164,22 +154,7 @@ export default class ApiRoute extends React.Component<Props> {
                           {r.desc}
                         </span>
                       </div>
-                      {
-                        r.modelTitle ?
-                          <div className="padding-v-sm">
-                            {
-                              r.type !== '{}' ?
-                                <div className="desc">
-                                  返回结果为{ r.type},
-                                  {
-                                    r.fieldType === 'tuple' ? '[ ' + r.modelTitle + ' ]' : r.modelTitle
-                                  }属性信息如下
-                                </div> : null
-                            }
-                            <FieldDisplay baseUrl={this.props.baseUrl} className="flex" value={r.fields} />
-                          </div> :
-                          <FieldDisplay baseUrl={this.props.baseUrl} className="flex" value={r.fields} />
-                      }
+                      <FieldDisplay type={r.type} baseUrl={this.props.baseUrl} className="flex" value={r.fields} />
                     </div>
                   ))
                 }

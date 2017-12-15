@@ -26,6 +26,7 @@ export default class ApiCode extends React.Component<Props> {
     if (this.props.className) {
       className = className + ' ' + this.props.className;
     }
+    // console.log('======ApiCode');
     return (
       <div className={className} id="code">
         <div className="panel-left">

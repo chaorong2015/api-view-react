@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.setFieldMaps = setFieldMaps;
+exports.getFieldMaps = getFieldMaps;
+exports.getSimpleModelByFieldType = getSimpleModelByFieldType;
 exports.getFieldsOfModel = getFieldsOfModel;
 exports.filterRouteFieldsByType = filterRouteFieldsByType;
 exports.getFieldsOfBody = getFieldsOfBody;
@@ -14,6 +17,37 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+let fieldMaps = {};
+/* 根据refId归类Field的Map图
+ * fields 所有的字段数组
+ * 返回数据 Field的Map图
+ * */
+/**
+ * 脉冲软件
+ * http://maichong.it
+ * @Created by Rong on 2017/11/17.
+ * @author Rong <chaorong@maichong.it>
+ */
+
+function setFieldMaps(fields) {
+  if (!fields) {
+    throw new Error('fields is required in getFieldMapsByRefId');
+  }
+  let map = {};
+  _lodash2.default.map(fields, f => {
+    if (f.refId) {
+      if (!map[f.refId]) map[f.refId] = [];
+      map[f.refId].push(f);
+    }
+  });
+  fieldMaps = map;
+  return fieldMaps;
+}
+/**返回数据 Field的Map图
+* */
+function getFieldMaps() {
+  return fieldMaps;
+}
 /* 根据对象名获取Model
  * title model的title，例如 User$Base
  * type model的类型，例如 scope
@@ -82,13 +116,6 @@ function getModelByTitle(title, type, params, relationData) {
  hasFields: true //是否有字段数组
  };
  * */
-/**
- * 脉冲软件
- * http://maichong.it
- * @Created by Rong on 2017/11/17.
- * @author Rong <chaorong@maichong.it>
- */
-
 function getSimpleModelByFieldType(fieldType) {
   if (!fieldType) return {};
   if (typeof fieldType !== 'string') {
@@ -141,26 +168,13 @@ function getSimpleModelByFieldType(fieldType) {
     model.hasFields = true;
     return model;
   }
+  if (fieldType === '{}') {
+    model.fieldType = 'object';
+    model.hasFields = true;
+    return model;
+  }
   model.fieldType = fieldType;
   return model;
-}
-
-/* 根据refId归类Field的Map图
- * fields 所有的字段数组
- * 返回数据 Field的Map图
- * */
-function getFiledMapsByRefId(fields) {
-  if (!fields) {
-    throw new Error('fields is required in getFiledMapsByRefId');
-  }
-  let map = {};
-  _lodash2.default.map(fields, f => {
-    if (f.refId) {
-      if (!map[f.refId]) map[f.refId] = [];
-      map[f.refId].push(f);
-    }
-  });
-  return map;
 }
 
 /* 获取字段类型中的模型，处理包含getSimpleModelByFieldType里的字段，好包含model在数据库里的数据
@@ -197,8 +211,6 @@ function getFieldsOfModel(model, relationData, i) {
   if (!i) i = 0;
   let results = [];
   if (i > 3) return results; //循环只能为2次
-  //获取字段的map图
-  let fieldMaps = getFiledMapsByRefId(relationData.fields);
   let modelType = '';
   //判断模型类型
   let s = getSimpleModelByFieldType(model.title);
@@ -357,7 +369,7 @@ function getFieldsOfResponse(route, relationData) {
   let responses = [];
   _lodash2.default.map(relationData.responses, response => {
     if (route.id && response.route && route.id.toString() === response.route.toString()) {
-      if (!response.type) return responses;
+      if (!response.type) return;
       if (response.type !== '{}') {
         let simpleModel = getSimpleModelByFieldType(response.type);
         if (!simpleModel.modelTitle) return;

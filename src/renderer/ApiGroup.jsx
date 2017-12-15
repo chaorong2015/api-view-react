@@ -26,6 +26,7 @@ export default class ApiGroup extends React.Component<Props> {
     if (this.props.className) {
       className = className + ' ' + this.props.className;
     }
+    // console.log('======ApiGroup');
     return (
       <div className={className} id={'group-' + value.id}>
         <BaseInfo className="panel-left" title={value.title} desc={value.desc} />

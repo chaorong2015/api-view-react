@@ -15,21 +15,28 @@ import ApiRoute from './ApiRoute';
 import ApiObject from './ApiObject';
 import ApiTuple from './ApiTuple';
 import ApiCode from './ApiCode';
+import type {
+  Description,
+  ObjectModel,
+  Tuple,
+  Code,
+  Field,
+  Scope,
+  Response,
+  MapGroup
+} from './types';
 
 type Props = {
   className?: string,
   baseUrl?: string,
-  value: {
-    groups: Array<Object>,
-    routes: Array<Object>,
-    descriptions: Array<Object>,
-    objects: Array<Object>,
-    tuples: Array<Object>,
-    codes: Array<Object>,
-    fields: Array<Object>,
-    scopes: Array<Object>,
-    responses: Array<Object>
-  }
+  descriptions: Array<Description>,
+  objects: Array<ObjectModel>,
+  tuples: Array<Tuple>,
+  codes: Array<Code>,
+  fields: Array<Field>,
+  scopes: Array<Scope>,
+  responses: Array<Response>,
+  mapGroup: MapGroup
 };
 
 export default class ApiInfoWrapper extends React.Component<Props> {
@@ -38,41 +45,22 @@ export default class ApiInfoWrapper extends React.Component<Props> {
     baseUrl: ''
   };
 
-  //初始化分组
-  getMapGroup(props:Object) {
-    let { value } = props;
-    let mapGroup = {};
-    if (value.groups) {
-      _.map(value.groups, (group) => {
-        mapGroup[group.id] = {
-          id: group.id,
-          title: group.title,
-          routes: []
-        };
-      });
-      _.map(value.routes, (route) => {
-        if (route.group && mapGroup[route.group]) {
-          mapGroup[route.group].routes.push(route);
-        }
-      });
-    }
-    return mapGroup;
-  }
-
   render() {
-    let { value, className } = this.props;
-    let mapGroup = this.getMapGroup(this.props);
+    let {
+      mapGroup, descriptions, objects, tuples, codes, fields, scopes, responses, className
+    } = this.props;
     let relationData = {
-      objects: value.objects,
-      tuples: value.tuples,
-      fields: value.fields,
-      scopes: value.scopes,
-      responses: value.responses
+      objects,
+      tuples,
+      fields,
+      scopes,
+      responses
     };
+    // console.log('======ApiInfoWrapper');
     return (
       <div className={className ? className + ' api-info-wrapper' : 'api-info-wrapper'}>
         {
-          value.descriptions && value.descriptions.length ? _.map(value.descriptions, (d) => (
+          descriptions && descriptions.length ? _.map(descriptions, (d) => (
             <div key={d.id}>
               <ApiDesc className="api-description" value={d} />
             </div>
@@ -97,14 +85,14 @@ export default class ApiInfoWrapper extends React.Component<Props> {
           ))
         }
         {
-          value.objects && value.objects.length ?
+          objects && objects.length ?
             <div>
               <div className="api-title-panel">
                 <div className="title panel-left">对象</div>
                 <div className="panel-right text-center" />
               </div>
               {
-                _.map(value.objects, (o) => (
+                _.map(objects, (o) => (
                   <ApiObject
                     key={o.id}
                     relation={relationData}
@@ -117,14 +105,14 @@ export default class ApiInfoWrapper extends React.Component<Props> {
             </div> : null
         }
         {
-          value.tuples && value.tuples.length ?
+          tuples && tuples.length ?
             <div>
               <div className="api-title-panel">
                 <div className="title panel-left">元组</div>
                 <div className="panel-right text-center" />
               </div>
               {
-                _.map(value.tuples, (t) => (
+                _.map(tuples, (t) => (
                   <ApiTuple
                     key={t.id}
                     relation={relationData}
@@ -137,9 +125,9 @@ export default class ApiInfoWrapper extends React.Component<Props> {
             </div> : null
         }
         {
-          value.codes && value.codes.length ?
+          codes && codes.length ?
             <div>
-              <ApiCode className="codes-panel api-codes" value={value.codes} />
+              <ApiCode className="codes-panel api-codes" value={codes} />
             </div> : null
         }
         <div className="api-module-panel empty-panel">

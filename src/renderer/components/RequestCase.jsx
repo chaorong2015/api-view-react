@@ -31,6 +31,7 @@ export default class RequestCase extends React.Component<Props> {
   render() {
     let { className, value, title } = this.props;
     if (!value || !value.fields || !value.fields.length) return <div />;
+    // console.log('======RequestCase');
     return (
       <div className={className ? className + ' request-case' : 'request-case'}>
         <div className="model-case-title">{title}</div>
