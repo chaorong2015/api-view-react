@@ -8,7 +8,6 @@
 // @flow
 
 import React from 'react';
-import { Table } from 'react-bootstrap';
 import _ from 'lodash';
 
 type Props = {
@@ -31,7 +30,7 @@ export default class ApiCode extends React.Component<Props> {
       <div className={className} id="code">
         <div className="panel-left">
           <div className="title">状态码</div>
-          <Table className="table table-bordered" responsive>
+          <table className="table table-bordered" responsive>
             <tbody className="desc">
               <tr>
                 <td className="text-center" width="100">状态码</td>
@@ -49,7 +48,7 @@ export default class ApiCode extends React.Component<Props> {
                   </tr>))
               }
             </tbody>
-          </Table>
+          </table>
         </div>
         <div className="panel-right text-center" />
       </div>

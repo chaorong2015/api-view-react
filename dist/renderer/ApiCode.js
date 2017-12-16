@@ -8,13 +8,18 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactBootstrap = require('react-bootstrap');
-
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * 脉冲软件
+ * http://maichong.it
+ * Created by Rong on 2017/11/17.
+ * chaorong@maichong.it
+ */
 
 class ApiCode extends _react2.default.Component {
   render() {
@@ -36,7 +41,7 @@ class ApiCode extends _react2.default.Component {
           '\u72B6\u6001\u7801'
         ),
         _react2.default.createElement(
-          _reactBootstrap.Table,
+          'table',
           { className: 'table table-bordered', responsive: true },
           _react2.default.createElement(
             'tbody',
@@ -80,13 +85,7 @@ class ApiCode extends _react2.default.Component {
     );
   }
 }
-exports.default = ApiCode; /**
-                            * 脉冲软件
-                            * http://maichong.it
-                            * Created by Rong on 2017/11/17.
-                            * chaorong@maichong.it
-                            */
-
+exports.default = ApiCode;
 ApiCode.defaultProps = {
   className: ''
 };
