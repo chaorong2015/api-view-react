@@ -9,7 +9,6 @@
 
 import React from 'react';
 import _ from 'lodash';
-import { getMockData } from '../utils/field-mock';
 
 type Props = {
   className?: string,
@@ -100,7 +99,7 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
 
   getCaseValueEle = (f: Object): Object|null => {
     let ele = null;
-    let fieldValue: Array<any> = getMockData(f);
+    let fieldValue: Array<any> = f.mockResult;
     if (_.isArray(fieldValue)) {
       ele =
         <span>
@@ -215,7 +214,7 @@ export default class CaseDataDisplay extends React.Component<Props, State> {
                           </span> : null
                         }
                         <span className="value">
-                          {f.caseValueEle}
+                          {f.caseValueEle || f.default}
                         </span>
                         {
                           parseInt(i) < value.length - 1 ? <span className="split">,</span> : null

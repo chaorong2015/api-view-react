@@ -65,20 +65,18 @@ export default class ApiMenu extends React.Component<Props> {
         }
         {
           _.map(descriptions, (desc) => (
-            <a
+            <MenuItems
               key={desc.id}
-              href={this.getUrl('description', desc.id)}
-              className="group group-description"
-            >
-              {desc.title}
-            </a>
+              baseUrl={this.props.baseUrl}
+              type="description"
+              value={{ title: desc.title, id: desc.id, items: [] }}
+            />
           ))
         }
         {
           _.map(mapGroup, (group) => (
             <MenuItems
               key={group.id}
-              isDownload={this.props.isDownload}
               baseUrl={this.props.baseUrl}
               type="group"
               value={{ title: group.title, id: group.id, items: group.routes }}
@@ -86,22 +84,22 @@ export default class ApiMenu extends React.Component<Props> {
           ))
         }
         <MenuItems
-          isDownload={this.props.isDownload}
           baseUrl={this.props.baseUrl}
           type="object"
           value={{ title: '对象', id: '', items: objects }}
         />
         <MenuItems
-          isDownload={this.props.isDownload}
           baseUrl={this.props.baseUrl}
           type="tuple"
           value={{ title: '元组', id: '', items: tuples }}
         />
         {
           codes && codes.length ?
-            <div className="menu">
-              <a href={this.getUrl('code')} className="group group-code">状态码</a>
-            </div> : null
+            <MenuItems
+              baseUrl={this.props.baseUrl}
+              type="code"
+              value={{ title: '状态码', id: '', items: [] }}
+            /> : null
         }
       </div>
     );

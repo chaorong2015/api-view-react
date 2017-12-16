@@ -12,9 +12,14 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _fieldMock = require('../utils/field-mock');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * 脉冲软件
+ * http://maichong.it
+ * Created by Rong on 2017/11/17.
+ * chaorong@maichong.it
+ */
 
 class CaseDataDisplay extends _react2.default.Component {
 
@@ -139,7 +144,7 @@ class CaseDataDisplay extends _react2.default.Component {
               _react2.default.createElement(
                 'span',
                 { className: 'value' },
-                f.caseValueEle
+                f.caseValueEle || f.default
               ),
               parseInt(i) < value.length - 1 ? _react2.default.createElement(
                 'span',
@@ -160,13 +165,7 @@ class CaseDataDisplay extends _react2.default.Component {
     );
   }
 }
-exports.default = CaseDataDisplay; /**
-                                    * 脉冲软件
-                                    * http://maichong.it
-                                    * Created by Rong on 2017/11/17.
-                                    * chaorong@maichong.it
-                                    */
-
+exports.default = CaseDataDisplay;
 CaseDataDisplay.defaultProps = {
   className: '',
   wrapType: '',
@@ -221,7 +220,7 @@ var _initialiseProps = function () {
 
   this.getCaseValueEle = f => {
     let ele = null;
-    let fieldValue = (0, _fieldMock.getMockData)(f);
+    let fieldValue = f.mockResult;
     if (_lodash2.default.isArray(fieldValue)) {
       ele = _react2.default.createElement(
         'span',

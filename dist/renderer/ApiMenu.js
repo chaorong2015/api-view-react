@@ -53,43 +53,33 @@ class ApiMenu extends _react2.default.Component {
       'div',
       { className: className ? className + ' api-menu' : 'api-menu' },
       isDownload ? _react2.default.createElement(_ApiSearch2.default, null) : null,
-      _lodash2.default.map(descriptions, desc => _react2.default.createElement(
-        'a',
-        {
-          key: desc.id,
-          href: this.getUrl('description', desc.id),
-          className: 'group group-description'
-        },
-        desc.title
-      )),
+      _lodash2.default.map(descriptions, desc => _react2.default.createElement(_MenuItems2.default, {
+        key: desc.id,
+        baseUrl: this.props.baseUrl,
+        type: 'description',
+        value: { title: desc.title, id: desc.id, items: [] }
+      })),
       _lodash2.default.map(mapGroup, group => _react2.default.createElement(_MenuItems2.default, {
         key: group.id,
-        isDownload: this.props.isDownload,
         baseUrl: this.props.baseUrl,
         type: 'group',
         value: { title: group.title, id: group.id, items: group.routes }
       })),
       _react2.default.createElement(_MenuItems2.default, {
-        isDownload: this.props.isDownload,
         baseUrl: this.props.baseUrl,
         type: 'object',
         value: { title: '对象', id: '', items: objects }
       }),
       _react2.default.createElement(_MenuItems2.default, {
-        isDownload: this.props.isDownload,
         baseUrl: this.props.baseUrl,
         type: 'tuple',
         value: { title: '元组', id: '', items: tuples }
       }),
-      codes && codes.length ? _react2.default.createElement(
-        'div',
-        { className: 'menu' },
-        _react2.default.createElement(
-          'a',
-          { href: this.getUrl('code'), className: 'group group-code' },
-          '\u72B6\u6001\u7801'
-        )
-      ) : null
+      codes && codes.length ? _react2.default.createElement(_MenuItems2.default, {
+        baseUrl: this.props.baseUrl,
+        type: 'code',
+        value: { title: '状态码', id: '', items: [] }
+      }) : null
     );
   }
 }

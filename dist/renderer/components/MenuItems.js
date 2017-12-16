@@ -54,7 +54,7 @@ class MenuItems extends _react2.default.Component {
     let className = 'menu';
     if (this.props.className) className = +' ' + this.props.className;
     if (!value) return _react2.default.createElement('div', null);
-    if (type !== 'group' && (!value.items || !value.items.length)) return _react2.default.createElement('div', null);
+    if (!value.id && (!value.items || !value.items.length)) return _react2.default.createElement('div', null);
     // console.log('======MenuItems');
     return _react2.default.createElement(
       'div',
@@ -63,34 +63,30 @@ class MenuItems extends _react2.default.Component {
         }, className: className },
       _react2.default.createElement(
         'div',
-        { className: 'menu-group' },
-        _react2.default.createElement(
-          'div',
-          { className: 'display-flex', onClick: () => this.openSub() },
-          value.id ? _react2.default.createElement(
-            'a',
-            { href: this.getUrl(type, value.id), className: `group group-${itemType} flex` },
-            value.title
-          ) : _react2.default.createElement(
-            'div',
-            { className: `group group-${itemType} flex` },
-            value.title
-          ),
-          value.items && value.items.length ? _react2.default.createElement(
-            'div',
-            {
-              className: 'icon icon-link pull-right padding-h-sm'
-            },
-            _react2.default.createElement('i', { className: 'fa fa-angle-right' }),
-            _react2.default.createElement('i', { className: 'fa fa-angle-down' })
-          ) : null
-        ),
-        _lodash2.default.map(value.items, item => _react2.default.createElement(
+        { className: 'display-flex menu-group', onClick: () => this.openSub() },
+        value.id ? _react2.default.createElement(
           'a',
-          { key: item.id, href: this.getUrl(itemType, item.id), className: `sub sub-${itemType}` },
-          item.title
-        ))
-      )
+          { href: this.getUrl(type, value.id), className: `group group-${itemType} flex` },
+          value.title
+        ) : _react2.default.createElement(
+          'div',
+          { className: `group group-${itemType} flex` },
+          value.title
+        ),
+        value.items && value.items.length ? _react2.default.createElement(
+          'div',
+          {
+            className: 'icon icon-link pull-right padding-h-sm'
+          },
+          _react2.default.createElement('i', { className: 'fa fa-angle-right' }),
+          _react2.default.createElement('i', { className: 'fa fa-angle-down' })
+        ) : null
+      ),
+      _lodash2.default.map(value.items, item => _react2.default.createElement(
+        'a',
+        { key: item.id, href: this.getUrl(itemType, item.id), className: `sub sub-${itemType}` },
+        item.title
+      ))
     );
   }
 }
@@ -98,6 +94,5 @@ exports.default = MenuItems;
 MenuItems.defaultProps = {
   className: '',
   mode: 'view',
-  isDownload: false,
   baseUrl: ''
 };
