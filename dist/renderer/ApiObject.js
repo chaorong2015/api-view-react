@@ -36,7 +36,7 @@ class ApiObject extends _react2.default.Component {
 
   getScopes() {
     let { value, relation } = this.props;
-    return _lodash2.default.filter(relation.scopes, s => s.object === value.id);
+    return _lodash2.default.filter(relation.scopes, s => s.object && value.id && s.object.toString() === value.id.toString());
   }
 
   render() {
