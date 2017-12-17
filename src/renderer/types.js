@@ -6,70 +6,70 @@
  */
 
 export type ObjectModel = {
-  id: string;
-  project: string;
-  library: string;
-  version: string;
-  title: string;
-  desc: string;
-  share: boolean;
+  id: string,
+  project: string,
+  library: string,
+  version: string,
+  title: string,
+  desc: string,
+  share: boolean
 }
 
 export type Field = {
-  id: string;
-  library: string;
-  version: string;
-  ref: string;
-  refId: string;
-  title: string;
-  sort: number;
-  type: string;
-  default: string;
-  mock: string;
-  mockResult: string;
-  desc: string;
+  id: string,
+  library: string,
+  version: string,
+  ref: string,
+  refId: string,
+  title: string,
+  sort: number,
+  type: string,
+  default: string,
+  mock: string,
+  mockResult: string,
+  desc: string
 }
 
 export type Tuple = {
-  id: string;
-  project: string;
-  library: string;
-  version: string;
-  title: string;
-  desc: string;
-  share: boolean;
+  id: string,
+  project: string,
+  library: string,
+  version: string,
+  title: string,
+  desc: string,
+  share: boolean
 }
 
 export type Scope = {
-  id: string;
-  library: string;
-  version: string;
-  object: string;
-  title: string;
-  fields: ApiField[];
+  id: string,
+  library: string,
+  version: string,
+  object: string,
+  title: string,
+  fields: ApiField[]
 }
 
 export type Route = {
-  library: string;
-  version: string;
-  title: string;
-  desc: string;
-  stability: string;
-  since: string;
-  group: string;
-  method: string;
-  path: string;
-  bodyType: string;
-  sort: number;
+  library: string,
+  version: string,
+  title: string,
+  desc: string,
+  stability: string,
+  since: string,
+  group: string,
+  method: string,
+  path: string,
+  bodyType: string,
+  sort: number
 }
 
 export type Group = {
-  id: string;
-  library: string;
-  version: string;
-  title: string;
-  desc: string;
-  sort: number;
+  id: string,
+  library: string,
+  version: string,
+  title: string,
+  desc: string,
+  sort: number
 }
 
 export type MapGroup = Group & {
@@ -77,28 +77,39 @@ export type MapGroup = Group & {
 }
 
 export type Response = {
-  id: string;
-  library: string;
-  version: string;
-  route: string;
-  code: number;
-  desc: string;
-  type: {} | void;
+  id: string,
+  library: string,
+  version: string,
+  route: string,
+  code: number,
+  desc: string,
+  type: {} | void
 }
 
 export type Description = {
-  id: string;
-  library: string;
-  version: string;
-  title: string;
-  desc: number;
-  sort: number;
+  id: string,
+  library: string,
+  version: string,
+  title: string,
+  desc: number,
+  sort: number
 }
 
 export type Code = {
-  id: string;
-  library: string;
-  version: string;
-  desc: number;
-  code: string;
+  id: string,
+  library: string,
+  version: string,
+  desc: number,
+  code: string
+}
+
+export type SimpleModel = {
+  modelType: string, //模型的类型
+  modelTitle: string, //模型的title
+  fieldType: string, //字段的类型
+  hasFields: boolean //是否有字段数组
+}
+
+export type ModelField = Field & SimpleModel & {
+  children:Object|Tuple|Scope & {fields: Array<ModelField>}
 }

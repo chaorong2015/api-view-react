@@ -120,11 +120,7 @@ export default class Index extends React.Component<Props, State> {
     let mapGroup = {};
     if (groups) {
       _.map(groups, (group) => {
-        mapGroup[group.id] = {
-          id: group.id,
-          title: group.title,
-          routes: []
-        };
+        mapGroup[group.id] = Object.assign({}, group, { routes: [] });
       });
       _.map(routes, (route) => {
         if (route.group && mapGroup[route.group]) {

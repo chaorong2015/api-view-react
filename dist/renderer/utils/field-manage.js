@@ -10,6 +10,7 @@ exports.getFieldsOfModel = getFieldsOfModel;
 exports.filterRouteFieldsByType = filterRouteFieldsByType;
 exports.getFieldsOfBody = getFieldsOfBody;
 exports.getFieldsOfResponse = getFieldsOfResponse;
+exports.parseFieldJson = parseFieldJson;
 
 var _lodash = require('lodash');
 
@@ -386,4 +387,39 @@ function getFieldsOfResponse(route, relationData) {
     }
   });
   return responses;
+}
+
+/*解析fields为json
+ fields  字段列表
+ modelType 字段引用的model类型
+ fieldType 字段要返回的类型
+ * */
+function parseFieldJson(fields, modelType, fieldType) {
+  // console.error('fields:', fields);
+  // console.error('type:', modelType);
+  let data = {};
+  if (modelType === 'tuple') {
+    data = [];
+    _lodash2.default.map(fields, f => {
+      if (f.children && f.children.fields) {
+        let children = f.children;
+        data.push(parseFieldJson(children.fields, children.modelType, children.fieldType));
+        return;
+      }
+      let tmp = f.mockResult;
+      data.push(tmp);
+    });
+    return data;
+  }
+  _lodash2.default.map(fields, f => {
+    if (f.children && f.children.fields) {
+      let children = f.children;
+      data[f.title] = parseFieldJson(f.children.fields, children.modelType, children.fieldType);
+      return;
+    }
+    let tmp = f.mockResult;
+    data[f.title] = tmp;
+  });
+  if (fieldType === 'array') return [data];
+  return data;
 }

@@ -26,14 +26,18 @@ class FieldDisplay extends _react2.default.Component {
         let { baseUrl } = this.props;
         let url = (baseUrl || '') + '#' + f.modelType + '-' + f.children.id;
         return _react2.default.createElement(
-          'a',
-          { key: f.id, href: url },
-          f.type
+          'span',
+          { className: 'type padding-right-xs' },
+          _react2.default.createElement(
+            'a',
+            { href: url },
+            f.type
+          )
         );
       }
       return _react2.default.createElement(
         'span',
-        null,
+        { className: 'type padding-right-xs' },
         f.type
       );
     }, _temp;
@@ -83,26 +87,13 @@ class FieldDisplay extends _react2.default.Component {
               { className: 'item-options' },
               _react2.default.createElement(
                 'div',
-                null,
-                _react2.default.createElement(
+                { className: 'options' },
+                this.getTypeDisplay(field),
+                field.options && field.options.required ? _react2.default.createElement(
                   'span',
-                  { className: 'type' },
-                  this.getTypeDisplay(field)
-                ),
-                _react2.default.createElement(
-                  'span',
-                  { className: 'text-danger' },
-                  field.options && field.options.required ? '必须' : ''
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'desc' },
-                field.desc || ''
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'help-block' },
+                  { className: 'text-danger padding-right-xs' },
+                  '\u5FC5\u987B'
+                ) : '',
                 field.default ? _react2.default.createElement(
                   'span',
                   { className: 'padding-right-xs' },
@@ -133,6 +124,11 @@ class FieldDisplay extends _react2.default.Component {
                   { className: 'padding-right-xs' },
                   '可选类型:' + field.options.unionType.join(',')
                 ) : ''
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'desc' },
+                field.desc || ''
               )
             )
           ))

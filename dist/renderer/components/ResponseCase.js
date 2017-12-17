@@ -46,7 +46,11 @@ class ResponseCase extends _react2.default.Component {
         { className: 'tabs' },
         _lodash2.default.map(value, (r, index) => _react2.default.createElement(
           'div',
-          { className: 'tab', key: index, onClick: () => this.setState({ response: r }) },
+          {
+            className: r.id === response.id ? 'tab active' : 'tab',
+            key: index,
+            onClick: () => this.setState({ response: r })
+          },
           _react2.default.createElement('i', { className: _lodash2.default.isNumber(r.code) && r.code <= 400 && r.code >= 200 ? 'fa fa-circle text-success' : 'fa fa-circle text-danger'
           }),
           _react2.default.createElement(
@@ -61,11 +65,16 @@ class ResponseCase extends _react2.default.Component {
           )
         ))
       ),
-      response.fields && response.fields.length ? _react2.default.createElement(
+      _react2.default.createElement(
         'div',
         { className: 'case-data-panel' },
-        _react2.default.createElement(_CaseDataDisplay2.default, { wrapType: response.fieldType, type: response.modelType, value: response.fields })
-      ) : null
+        _react2.default.createElement(_CaseDataDisplay2.default, {
+          defaultJson: {},
+          wrapType: response.fieldType,
+          type: response.modelType,
+          value: response.fields || []
+        })
+      )
     );
   }
 }

@@ -374,3 +374,38 @@ export function getFieldsOfResponse(route: Object, relationData:Object):Array<Ob
   });
   return responses;
 }
+
+/*解析fields为json
+ fields  字段列表
+ modelType 字段引用的model类型
+ fieldType 字段要返回的类型
+ * */
+export function parseFieldJson(fields: Array<Object>, modelType: string, fieldType: string):any {
+  // console.error('fields:', fields);
+  // console.error('type:', modelType);
+  let data = {};
+  if (modelType === 'tuple') {
+    data = [];
+    _.map(fields, (f) => {
+      if (f.children && f.children.fields) {
+        let children = f.children;
+        data.push(parseFieldJson(children.fields, children.modelType, children.fieldType));
+        return;
+      }
+      let tmp = f.mockResult;
+      data.push(tmp);
+    });
+    return data;
+  }
+  _.map(fields, (f) => {
+    if (f.children && f.children.fields) {
+      let children = f.children;
+      data[f.title] = parseFieldJson(f.children.fields, children.modelType, children.fieldType);
+      return;
+    }
+    let tmp = f.mockResult;
+    data[f.title] = tmp;
+  });
+  if (fieldType === 'array') return [data];
+  return data;
+}

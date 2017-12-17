@@ -34,9 +34,9 @@ export default class FieldDisplay extends React.Component<Props> {
     if (f.modelTitle && f.type !== 'union') {
       let { baseUrl } = this.props;
       let url = (baseUrl || '') + '#' + f.modelType + '-' + f.children.id;
-      return <a key={f.id} href={url}>{f.type}</a>;
+      return <span className="type padding-right-xs"><a href={url}>{f.type}</a></span>;
     }
-    return <span>{f.type}</span>;
+    return <span className="type padding-right-xs">{f.type}</span>;
   };
   render() {
     let {
@@ -70,18 +70,15 @@ export default class FieldDisplay extends React.Component<Props> {
                     field.title ? <div className="item-title">{field.title}</div> : null
                   }
                   <div className="item-options">
-                    <div>
-                      <span className="type">
-                        {
-                          this.getTypeDisplay(field)
-                        }
-                      </span>
-                      <span className="text-danger">
-                        {field.options && field.options.required ? '必须' : ''}
-                      </span>
-                    </div>
-                    <div className="desc">{field.desc || ''}</div>
-                    <div className="help-block">
+                    <div className="options">
+                      {
+                        this.getTypeDisplay(field)
+                      }
+                      {field.options && field.options.required ?
+                        <span className="text-danger padding-right-xs">
+                          必须
+                        </span> : ''
+                      }
                       {field.default ?
                         <span className="padding-right-xs">
                           {'默认值:' + field.default}
@@ -114,6 +111,7 @@ export default class FieldDisplay extends React.Component<Props> {
                         </span> : ''
                       }
                     </div>
+                    <div className="desc">{field.desc || ''}</div>
                   </div>
                 </div>
               ))

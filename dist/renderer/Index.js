@@ -80,11 +80,7 @@ class Index extends _react2.default.Component {
     let mapGroup = {};
     if (groups) {
       _lodash2.default.map(groups, group => {
-        mapGroup[group.id] = {
-          id: group.id,
-          title: group.title,
-          routes: []
-        };
+        mapGroup[group.id] = Object.assign({}, group, { routes: [] });
       });
       _lodash2.default.map(routes, route => {
         if (route.group && mapGroup[route.group]) {

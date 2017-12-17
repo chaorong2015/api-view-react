@@ -51,7 +51,11 @@ export default class ResponseCase extends React.Component<Props, State> {
         <div className="tabs">
           {
             _.map(value, (r, index) => (
-              <div className="tab" key={index} onClick={() => this.setState({ response: r })}>
+              <div
+                className={r.id === response.id ? 'tab active' : 'tab'}
+                key={index}
+                onClick={() => this.setState({ response: r })}
+              >
                 <i className={
                   _.isNumber(r.code) && r.code <= 400 && r.code >= 200 ?
                   'fa fa-circle text-success' : 'fa fa-circle text-danger'
@@ -63,12 +67,14 @@ export default class ResponseCase extends React.Component<Props, State> {
             ))
           }
         </div>
-        {
-          response.fields && response.fields.length ?
-            <div className="case-data-panel">
-              <CaseDataDisplay wrapType={response.fieldType} type={response.modelType} value={response.fields} />
-            </div> : null
-        }
+        <div className="case-data-panel">
+          <CaseDataDisplay
+            defaultJson={{}}
+            wrapType={response.fieldType}
+            type={response.modelType}
+            value={response.fields || []}
+          />
+        </div>
       </div>
     );
   }
